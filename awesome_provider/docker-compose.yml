@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+    api:
+        build: ./app
+        ports: 
+            - "80:5000"
+        networks: 
+            - backend
+        environment: 
+            - 'DB_URL=awsome_provider_sql:3606' 
+            - 'DB_USR=ROOT' 
+            - 'DB_PASS=pass' 
+            - 'DB_NAME=billdb'
+    sql:
+        build: ./db_scripts
+        ports: 
+            - "3306"
+        volumes:
+            - '${pwd}/conrainer_data:/docker-entrypoint-initdb.d'
+        networks: 
+            - backend
+        environment: 
+            - 'MYSQL_ROOT_PASSWORD=pass'
+networks:
+    backend:

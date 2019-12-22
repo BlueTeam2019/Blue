@@ -3,11 +3,11 @@ import provider_model
 import sys
 
 app = Flask(__name__)
-data = None
+model = None
 
 @app.route('/health', methods=["GET"])
 def CheckHealth():
-    isAlive = provider_model.CheckHealth()
+    isAlive = model.CheckHealth()
     if isAlive:
         return "OK", 200
     else:
@@ -20,7 +20,5 @@ if __name__ == '__main__':
     dbUser = app.varg[3]
     dbName = app.varg[4]
 
-    data = provider_model(dbUrl, dbUser, dbPass, dbName)
-
+    data = model(dbUrl, dbUser, dbPass, dbName)
     app.run(host='0.0.0.0',debug=True)
-
