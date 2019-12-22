@@ -1,4 +1,11 @@
-FROM mysql/mysql-server:5.7
-COPY create-db.sql  /docker-entrypoint-initdb.d
+FROM python:latest
 
+COPY . /app
 
+WORKDIR /app
+
+RUN pip install flask mysql-connector-python flask-cors
+
+ENTRYPOINT ["python"]
+
+CMD ["app.py"]
