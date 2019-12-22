@@ -9,7 +9,7 @@ model = None
 def CheckHealth():
     isAlive = model.CheckHealth()
     if isAlive:
-        return "OK", 200
+ return "OK", 200
     else:
         return "Internal Error", 500 
 

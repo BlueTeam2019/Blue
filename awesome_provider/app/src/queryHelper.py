@@ -10,24 +10,31 @@ class QueryHelper():
         self.url = url
         self.usr = usr
         self.password = password
-    
-
-    def getConnection();
+        self.dbName=dbName
+        
+    def GetConnection():
         return MySQLdb.connect(host=url,    # your host, usually localhost
                         user=usr,         # your username
                         passwd=password,  # your password
-                        db=dbName)        # name of the data base
+                        db=dbName,
+                        port=3306)        # name of the data base
+           
 
+   # def __init__(self , url, usr, password, dbName):
+   #     db = MySQLdb.connect(host="localhost",    # your host, usually localhost
+   #                     user="root",         # your username
+   #                     passwd="1",  # your password
+   #                     db="mysql")        # name of the data base
+        
     def selectOne():
-            # you must create a Cursor object. It will let
-        #  you execute all the queries you need
+        db = MySQLdb.connect(host="127.0.0.1",    # your host, usually localhost
+                        user="root",         # your username
+                        passwd="secret",  # your password
+                        db="mysql",
+                        port=3306)        # name of the data base                  
+                           
         cur = db.cursor()
-
-        # Use all the SQL you like
-        cur.execute("SELECT 1;")
-        row = cur.fetchall()
-        # print all the first cell of all the rows
-        #for row in cur.fetchall():
-        #    print row[0]
-
+        cur.execute(""" select 1  """)
+        data = cur.fetchall()               
         db.close()
+        return data[0][0]
