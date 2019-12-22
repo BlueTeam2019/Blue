@@ -1,19 +1,26 @@
 import MySQLdb
 
-db = MySQLdb.connect(host="localhost",    # your host, usually localhost
-                     user="john",         # your username
-                     passwd="megajonhy",  # your password
-                     db="jonhydb")        # name of the data base
+class QueryHelper():
 
-# you must create a Cursor object. It will let
-#  you execute all the queries you need
-cur = db.cursor()
+    db
 
-# Use all the SQL you like
-cur.execute("SELECT * FROM YOUR_TABLE_NAME")
+    def __init__(self , url, usr, password, dbName):
+        db = MySQLdb.connect(host=url,    # your host, usually localhost
+                        user=usr,         # your username
+                        passwd=password,  # your password
+                        db=dbName)        # name of the data base
+        
 
-# print all the first cell of all the rows
-for row in cur.fetchall():
-    print row[0]
+    def selectOne():
+            # you must create a Cursor object. It will let
+        #  you execute all the queries you need
+        cur = db.cursor()
 
-db.close()
+        # Use all the SQL you like
+        cur.execute("SELECT 1;")
+
+        # print all the first cell of all the rows
+        #for row in cur.fetchall():
+        #    print row[0]
+
+        db.close()
