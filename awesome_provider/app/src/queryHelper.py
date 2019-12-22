@@ -7,7 +7,9 @@ class QueryHelper():
     dbName = ""
 
     def __init__(self , url, usr, password, dbName):
-        self.
+        self.url = url
+        self.usr = usr
+        self.password = password
     
 
     def getConnection();
