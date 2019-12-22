@@ -3,8 +3,7 @@ import provider_model
 app = Flask(__name__)
 
 @app.route('/health', methods=["GET"])
-def CheckHealth():
-    
+def CheckHealth():    
     if provider_model.CheckHealth():
         return "OK", 200
     else:

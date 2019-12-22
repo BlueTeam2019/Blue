@@ -28,5 +28,8 @@ class QueryHelper():
         cur = db.cursor()
         cur.execute(""" select 1  """)
         data = cur.fetchall()       
+        print(data)
+        print(data[0])
+        print(data[0][0])
         db.close()
-        return data[0][0]
+        return data[0][1]

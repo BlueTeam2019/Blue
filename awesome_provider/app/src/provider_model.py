@@ -7,6 +7,6 @@ def CheckHealth():
     try:        
         if queryHelper.QueryHelper.selectOne() == 1:
             isAlive = True
-    except ex:
+    except:
         print("DB ERROR")
     return isAlive
