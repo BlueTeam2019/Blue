@@ -9,16 +9,17 @@ model = None
 def CheckHealth():
     isAlive = model.CheckHealth()
     if isAlive:
- return "OK", 200
+        return "OK", 200
     else:
         return "Internal Error", 500 
 
 
 if __name__ == '__main__':
-    dbUrl = app.varg[1]
-    dbPass = app.varg[2]
-    dbUser = app.varg[3]
-    dbName = app.varg[4]
+    dbUrl = sys.argv[1]
+    dbPass = sys.argv[2]
+    dbUser = sys.argv[3]
+    dbName = sys.argv[4]
+    dbPort = sys.argv[5]
 
-    data = model(dbUrl, dbUser, dbPass, dbName)
+    model = provider_model(dbUrl, dbUser, dbPass, dbName, dbPort)
     app.run(host='0.0.0.0',debug=True)

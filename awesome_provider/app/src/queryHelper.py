@@ -1,38 +1,23 @@
 import MySQLdb
 class QueryHelper():
 
-    url = ""
-    usr = ""
-    password = ""
-    dbName = ""
-
-    def __init__(self , url, usr, password, dbName):
+    def __init__(self , url, usr, password, dbName, port):
         self.url = url
         self.usr = usr
         self.password = password
         self.dbName=dbName
-        
-    def GetConnection():
-        return MySQLdb.connect(host=url,    # your host, usually localhost
-                        user=usr,         # your username
-                        passwd=password,  # your password
-                        db=dbName,
-                        port=3306)        # name of the data base
+        self.port
+
+    def GetConnection(self):
+        return MySQLdb.connect(host=self.url,    # your host, usually localhost
+                        user=self.usr,         # your username
+                        passwd=self.password,  # your password
+                        db=self.dbName,
+                        port=self.port)        # name of the data base
            
 
-   # def __init__(self , url, usr, password, dbName):
-   #     db = MySQLdb.connect(host="localhost",    # your host, usually localhost
-   #                     user="root",         # your username
-   #                     passwd="1",  # your password
-   #                     db="mysql")        # name of the data base
-        
     def selectOne():
-        db = MySQLdb.connect(host="127.0.0.1",    # your host, usually localhost
-                        user="root",         # your username
-                        passwd="secret",  # your password
-                        db="mysql",
-                        port=3306)        # name of the data base                  
-                           
+        db = GetConnection()         
         cur = db.cursor()
         cur.execute(""" select 1  """)
         data = cur.fetchall()               
