@@ -4,8 +4,8 @@ app = Flask(__name__)
 
 @app.route('/health', methods=["GET"])
 def CheckHealth():
-    isAlive = provider_model.CheckHealth()
-    if isAlive:
+    
+    if provider_model.CheckHealth():
         return "OK", 200
     else:
         return "Internal Error", 500 

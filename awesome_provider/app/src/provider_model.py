@@ -1,8 +1,12 @@
 import queryHelper
+
+
 def CheckHealth():
     #TODO: Call connection to db method / run select 1 from helper        
-    try:
-        one = selectOne()
-    except expression as identifier:
+    isAlive = False
+    try:        
+        if queryHelper.QueryHelper.selectOne() == 1:
+            isAlive = True
+    except ex:
         print("DB ERROR")
-    return one
+    return isAlive
