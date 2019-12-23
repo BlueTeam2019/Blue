@@ -1,15 +1,14 @@
-from flask import Flask, request
-import provider_model
-import sys
+from flask import Flask
+from provider_model import ProviderModel
+
 
 app = Flask(__name__)
-#model = None
+
 
 @app.route('/health', methods=["GET"])
-def CheckHealth():
+def health():
     print("in route")
-    isAlive = provider_model.provider_model.CheckHealth()
-    if isAlive:
+    if ProviderModel().check_health():
         return "OK", 200
     else:
         return "Internal Error", 500 
