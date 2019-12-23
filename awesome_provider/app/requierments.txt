@@ -1,3 +1,2 @@
 Flask
-MySQL-python
-MySQL-python-connector
+mysqlclient
