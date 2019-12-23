@@ -9,21 +9,22 @@ services:
         networks: 
             - backend
         environment: 
-            - 'DB_URL=awsome_provider_sql_1:3306'  
+            - 'DB_URL=awsome_provider_sql_1'  
             - 'DB_PASS=pass' 
             - 'DB_NAME=billdb'
-            - 'DB_PORT=3306'
+            - 'DB_PORT=33060'
             
             
     sql:
         container_name: mysql
         build: ./db_scripts
         ports: 
-            - "3308:3306"
+            - "33060:3306"
         networks: 
             - backend
         volumes: 
             - ./container_data:/var/lib/mysql
+            - db:/docker-entrypoint-initdb.d
         environment: 
             - MYSQL_ROOT_PASSWORD=pass        
             - MYSQL_PASSWORD=pass            
@@ -32,6 +33,6 @@ networks:
     backend:
 volumes: 
     container_data:
-    
+    db:
     
         
