@@ -1,6 +1,5 @@
 import pymysql
 import sys
-import prettytable
 class QueryHelper():            
     #def __init__(self , url, usr, password, dbName, port):
     #    self.url = url
