@@ -1,5 +1,5 @@
 from flask import Flask, request
-
+import json
 app = Flask(__name__)  # Standard Flask app
 
 
@@ -11,7 +11,7 @@ def hello_world():
 @app.route('/webhook', methods=['POST'])
 def webhook():
     content = request.json
-    print("Got push with: {0}".format(content))
+    print("Got push with: {0}".format(json.dumps(content, indent=2)))
     return "CI server webhooked".format(content)
 
 
