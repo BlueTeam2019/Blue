@@ -23,4 +23,4 @@ def CheckHealth():
 #    dbPort = sys.argv[5]
 
     #model = provider_model(dbUrl, dbUser, dbPass, dbName, dbPort)
-app.run(host='0.0.0.0',debug=True)
+app.run(host='0.0.0.0')
