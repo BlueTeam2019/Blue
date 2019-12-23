@@ -1,4 +1,4 @@
-import MySQLdb
+import pymysql
 class QueryHelper():            
     #def __init__(self , url, usr, password, dbName, port):
     #    self.url = url
@@ -11,7 +11,7 @@ class QueryHelper():
     
 
     def GetConnection():
-        return MySQLdb.connect(host="mysql",    # your host, usually localhost
+        return pymysql.connect(host="mysql",    # your host, usually localhost
                         user="api",                # your username
                         passwd="pass",            # your password
                         db="mysql",                 # name of the data base
@@ -22,11 +22,11 @@ class QueryHelper():
         value = 0
         try:
             print("before connect")
-            db = MySQLdb.connect(host="mysql",    # your host, usually localhost
+            db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="mysql",               # name of the data base
-                            port=3306)                # port of the data base    
+                            port=33060)                # port of the data base    
             print("after connect")                                        
             cur = db.cursor()
             print("after cursor")                                        
