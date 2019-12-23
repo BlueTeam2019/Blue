@@ -1,44 +1,55 @@
 import os
 import subprocess
-
 import yaml
 from flask import Flask, request
 from git import Repo
+import shutil
 
-app = Flask(__name__)  # Standard Flask app
+# Standard Flask app
+app = Flask(__name__)
 
+# Configuration
 git_url = "git@github.com:BlueTeam2019/Blue.git"
 repo_dir = "/home/ubuntu/testing/"
 weight_path = "/weight/docker-compose_test.yml"
 providor_path = "/awesome_provider/docker-compose.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
+master_history_path = "/home/ubuntu/master_hist"
 
 
-@app.route("/", )  # Standard Flask endpoint
+# Standard Flask endpoint
+@app.route("/", )
 def hello_world():
     return "CI server is listening..."
 
 
+# webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    # parsing post request
     content = request.json
     pusher = content["pusher"]["name"]
     pusher_email = content["pusher"]["email"]
     head_commit = content["head_commit"]["id"]
     branch_name = os.path.basename(content["ref"])
 
-    print("Got push with: {0},{1},{2},{3}".format(pusher, pusher_email, head_commit, branch_name))
+    # creating a local repository for testing
     repo = repo_dir + head_commit
     create_repo_of_commit(git_url, repo, head_commit)
 
+    # building testing build
     build(repo + weight_path, repo + providor_path)
+
+    # testing build and sending reports
     test_result = exec_tests()
     send_report(test_result)
-    clear_test(head_commit)
-    if branch_name == "maaaster":
-        build(repo + weight_path_prod, repo + providor_path_prod)
 
+    if branch_name == "master":
+        build(repo + weight_path_prod, repo + providor_path_prod)
+        shutil.move(repo, master_history_path, copy_function=shutil.copytree)
+
+    clear_test(head_commit)
     return "CI server webhooked".format(content)
 
 
