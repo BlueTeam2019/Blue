@@ -35,7 +35,7 @@ class QueryHelper():
                 db.close()                    
         return returnValue
     
-    def GetmysqlData(query):
+    def GetData(query):
         returnValue = ""
         if query != "":
              try:
