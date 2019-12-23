@@ -2,9 +2,10 @@ version: '3'
 
 services:
     api:
+        container_name: billingapi
         build: ./app
         ports: 
-            - "80:5000"
+            - "8081:5000"
         networks: 
             - backend
         environment: 
@@ -13,15 +14,25 @@ services:
             - 'DB_PASS=pass' 
             - 'DB_NAME=billdb'
             - 'DB_PORT=3306'
+            
+            
     sql:
+        container_name: mysql
         build: ./db_scripts
         ports: 
-            - "3306:3306"
-        volumes:
-            - '${PWD}/conrainer_data:/docker-entrypoint-initdb.d'
+            - "3306:3306"        
         networks: 
             - backend
-        environment: 
-            - 'MYSQL_ROOT_PASSWORD=pass'
+        volumes: 
+            - 'container_data:/docker-entrypoint-initdb.d'        
+        #environment: 
+            #- MYSQL_ROOT_PASSWORD=pass
+            #- MYSQL_USER=root
+            #- MYSQL_PASSWORD=pass            
+            #- MYSQL_DATABASE=billdb
 networks:
     backend:
+volumes: 
+    container_data:
+    
+        
