@@ -14,7 +14,8 @@ def CheckHealth():
     else:
         return "Internal Error", 500 
 
-
+def sum_two_numbers(num1, num2):
+    return num1 + num2
 #if __name__ == '__main__':
 #    dbUrl = sys.argv[1]
 #    dbPass = sys.argv[2]
