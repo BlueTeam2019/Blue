@@ -7,6 +7,7 @@ class QueryHelper():
     #    self.password = password
     #    self.dbName=dbName
     #    self.port               
+
     def GetConnection():
         return pymysql.connect(host="mysql",    # your host, usually localhost
                         user="api",                # your username
