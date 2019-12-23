@@ -36,7 +36,8 @@ def checkalive():
 Will upload list of tara weights from a file in "/in" folder. Usually used to accept a batch of new containers. 
 File formats accepted: csv (id,kg), csv (id,lbs), json ([{"id":..,"weight":..,"unit":..},...])
 """
-def batch_up(batchFile, methods=['POST']):
+def batch_up(request):
+    return(str(request))
     # 1- receive file (to be parsed) or filename (to be looked in /in)
     # 2- check if csv or json, to parse correctly
     # 3- maintain a connection to MySQL DB
