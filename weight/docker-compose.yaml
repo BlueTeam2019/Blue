@@ -14,11 +14,13 @@ services:
   mysql:
     build:
         context: .
-        dockerfile: Dockerfile.sql
+        dockerfile: Dockerfile.q
     environment:
-        MYSQL_DATABASE: 'weight'
-        MYSQL_ROOT_PASSWORD: 'pass'
-        MYSQL_ROOT_HOST: 'root'
+        MYSQL_DATABASE: "weight"
+        MYSQL_USER: "root"
+        MYSQL_PASSWORD: "pass"
+        MYSQL_ROOT_PASSWORD: "pass"
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
         - "3306:3306" 
     
