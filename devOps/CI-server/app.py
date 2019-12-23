@@ -9,7 +9,7 @@ app = Flask(__name__)  # Standard Flask app
 
 git_url = "git@github.com:BlueTeam2019/Blue.git"
 repo_dir = "/home/ubuntu/testing/"
-weight_path = "/weight/docker-compose.yml"
+weight_path = "/weight/docker-compose_test.yml"
 providor_path = "/awesome_provider/docker-compose.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
