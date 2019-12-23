@@ -19,11 +19,11 @@ class QueryHelper():
         returnValue = ""
         if query != "":
             try:
-                db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
+                db = pymysql.connect(host="mysql",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="billdb",               # name of the data base
-                            port=33060)                # port of the data base                                
+                            port=3306)                # port of the data base                                
                 cur = db.cursor()            
                 returnValue =  str(cur.execute(query))
                 db.commit()                               
@@ -39,14 +39,14 @@ class QueryHelper():
         returnValue = ""
         if query != "":
              try:
-                db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
+                db = pymysql.connect(host="mysql",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="billdb",               # name of the data base
-                            port=33060)                # port of the data base                
+                            port=3306)                # port of the data base                
                 
                 cur = db.cursor()            
-                cur.execute("SELECT * FROM Provider")                                
+                cur.execute(query)                                
                 data = cur.fetchall()                                            
                 returnValue = data
              except pymysql.err:
@@ -61,11 +61,11 @@ class QueryHelper():
     def selectOne():
         value = 0
         try:            
-            db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
+            db = pymysql.connect(host="mysql",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="mysql",               # name of the data base
-                            port=33060)                # port of the data base                
+                            port=3306)                # port of the data base                
             cur = db.cursor()            
             cur.execute(""" select 1  """)            
             data = cur.fetchall()                          
