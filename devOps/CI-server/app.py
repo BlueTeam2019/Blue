@@ -71,8 +71,10 @@ def clear_test(commit):
 
 
 def build(weight_path, provider_path):
-    subprocess.run("docker-compose -f {0} up --build -d".format(weight_path), shell=True)
-    subprocess.run("docker-compose -f {0} up --build --no-cache -d".format(provider_path), shell=True)
+    subprocess.run("docker-compose -f {0} build ---no-cache".format(weight_path), shell=True)
+    subprocess.run("docker-compose -f {0} up -d ".format(weight_path), shell=True)
+    subprocess.run("docker-compose -f {0} build ---no-cache".format(provider_path), shell=True)
+    subprocess.run("docker-compose -f {0} up -d ".format(provider_path), shell=True)
 
 
 def edit_docker_compose_test(path):
