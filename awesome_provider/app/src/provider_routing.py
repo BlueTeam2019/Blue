@@ -15,12 +15,4 @@ def CheckHealth():
         return "Internal Error", 500 
 
 
-#if __name__ == '__main__':
-#    dbUrl = sys.argv[1]
-#    dbPass = sys.argv[2]
-#    dbUser = sys.argv[3]
-#    dbName = sys.argv[4]
-#    dbPort = sys.argv[5]
-
-    #model = provider_model(dbUrl, dbUser, dbPass, dbName, dbPort)
 app.run(host='0.0.0.0')
