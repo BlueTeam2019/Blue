@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)  # Standard Flask app
 
@@ -9,9 +9,10 @@ def hello_world():
 
 
 @app.route('/webhook', methods=['POST'])
-def webhook(data):
-    print("Got push with: {0}".format(data))
-    return "CI server webhooked"
+def webhook():
+    content = request.json
+    print("Got push with: {0}".format(content))
+    return "CI server webhooked".format(content)
 
 
 if __name__ == "__main__":
