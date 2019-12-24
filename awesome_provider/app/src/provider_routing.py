@@ -17,7 +17,8 @@ def CheckHealth():
 def register_truck():
     is_successful = False
     try:
-        is_successful = provider_model.provider_model.register_truck(request.get_json())
+        data = request.get_json()
+        is_successful = provider_model.provider_model.register_truck(data)
     except:
         print("Error")
 
@@ -25,5 +26,20 @@ def register_truck():
         return "OK",200
     else:
         return "Invalid Request", 400
+
+@app.route('/truck/{id}', methods=["PUT"])
+def update_truck_provider():
+    is_successful = False
+    try:
+        data = request.get_json()
+        is_successful = provider_model.provider_model.update_truck(data,new_provider)
+    except:
+        print("Error")
+
+    if is_successful:
+        return "OK",200
+    else:
+        return "Invalid Request", 400
+
 
 app.run(host='0.0.0.0', debug=True)
