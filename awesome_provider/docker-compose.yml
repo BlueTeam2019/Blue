@@ -1,18 +1,18 @@
 version: '3'
 
 services:
-    api:
-        container_name: billingapi
-        build: ./app
-        ports: 
-            - "8081:5000"
-        networks: 
-            - backend
-        environment: 
-            - 'DB_URL=awsome_provider_sql_1'  
-            - 'DB_PASS=pass' 
-            - 'DB_NAME=billdb'
-            - 'DB_PORT=33060'
+        # api:
+        # container_name: billingapi
+        #build: ./app
+        #ports: 
+        #    - "8081:5000"
+        #networks: 
+        #    - backend
+        #environment: 
+        #    - 'DB_URL=awsome_provider_sql_1'  
+        #    - 'DB_PASS=pass' 
+              # - 'DB_NAME=billdb'
+              #      - 'DB_PORT=33060'
             
             
     sql:
