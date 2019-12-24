@@ -1,38 +1,29 @@
-from unittest import TestCase
-from unittest.mock import MagicMock
-from src import provider_routing #, db, mail
-from src.provider_model import provider_model
-from queryHelper import QueryHelper
+import unittest
+from unittest import TestCase, mock
+from src import provider_routing
 
 class AppTest(TestCase):
     # executed prior to each test
     def setUp(self):
-        provider_routing.config['TESTING'] = True
-        # app.config['WTF_CSRF_ENABLED'] = False
-        provider_routing.config['DEBUG'] = False
-        # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-        #     os.path.join(app.config['BASEDIR'], TEST_DB)
-        self.app = provider_routing.test_client()
-        # db.drop_all()
-        # db.create_all()
- 
-        # Disable sending emails during unit testing
-        # mail.init_app(app)
-        # self.assertEqual(app.debug, False)
- 
-    # executed after each test
+        self.app = provider_routing.app
+        self.app.config['TESTING'] = True
+        self.app.config['DEBUG'] = True
+        self.client = self.app.test_client()
+
     def tearDown(self):
         pass
-    def test_get_health_200(self):
-        self.app.CheckHealth = MagicMock(return_value=3)
-        response = self.app.get('/')
-        self.assertEqual(response, 200)
 
-if __name__ == "__main__":
-     unittest.main()
+    @mock.patch("src.provider_routing.model")
+    def test_get_health_200(self, mock_model):
+        mock_model.check_health.return_val = True
+
+        #provider_routing.set_model(mock_model)
+        response = self.client.get('/health')
+        self.assertEqual(200, response.status_code)
+
 
 #python3 -m venv virt
 #source virt/bin/activate
 #sudo apt install default-libmysqlclient-dev
 #pip3 install -r requierments.txt
-#python -m unittest discover tests/
+#python -m unittest discover ../tests/

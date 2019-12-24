@@ -1,14 +1,12 @@
 import queryHelper
 
-class provider_model:
-    #def __init__(self , url, usr, password, dbName):
-     #   self.query = QueryHelper(url, usr, password, dbName)
+class Model:
+    def __init__(self, qHelper):
+        self.query = qHelper
 
-    def CheckHealth():
-        print("in CheckHealth()")
-        #TODO: Call connection to db method / run select 1 from helper        
+    def check_health(self):
         isAlive = False
-        try:        
+        try:
             if queryHelper.QueryHelper.selectOne() == 1:
                 isAlive = True
         except:

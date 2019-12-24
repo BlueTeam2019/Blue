@@ -1,18 +1,21 @@
 from flask import Flask, request
-import provider_model
+from provider_model import Model
 import sys
 
-app = Flask(__name__)
+from queryHelper import QueryHelper
 
+app = Flask(__name__)
+model = None
 
 @app.route('/health', methods=["GET"])
-def CheckHealth(self):
+def CheckHealth():
     print("in route")
-    isAlive = self.model.CheckHealth()
+    isAlive = model.check_health()
     if isAlive:
         return "OK", 200
     else:
-        return "Internal Error", 500 
+        return "Internal Error", 500
+
 
 if __name__ == '__main__':
     dbUrl = sys.argv[1]
@@ -20,6 +23,7 @@ if __name__ == '__main__':
     dbUser = sys.argv[3]
     dbName = sys.argv[4]
     dbPort = sys.argv[5]
+    qHelper = QueryHelper(dbUrl, dbUser, dbPass, dbName, dbPort)
+    model = Model(qHelper)
 
-    self.model = provider_model(dbUrl, dbUser, dbPass, dbName, dbPort)
-app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
