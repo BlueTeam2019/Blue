@@ -6,15 +6,15 @@ services:
         dockerfile: Dockerfile
     ports:
      - "5000:5000"
-    volumes:
-     - .:/app
+    #volumes:
+    # - .:/app
 
 
 
   mysql:
     build:
         context: .
-        dockerfile: Dockerfile.q
+        dockerfile: Dockerfile.sql
     environment:
         MYSQL_DATABASE: "weight"
         MYSQL_USER: "root"
