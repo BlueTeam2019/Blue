@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import mysql.connector
 import pandas as pd
@@ -5,20 +7,47 @@ from flask import Flask, request
 from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename
 
+# APP_PORT    = 5000
+IN_DIR      = 'in/' # Path to Blue/weight/in folder (batch-weight)
+
+MYSQL_DB	= 'weight'
+MYSQL_USER  = 'root'
+MYSQL_PW 	= 'pass'
+MYSQL_HOST 	= 'mysql'
+MYSQL_PORT	= '3306'
+
 app = Flask(__name__)
 
+
 @app.route("/", methods=['GET'])
-def hello():
-    return "HOME is where ♥Heart is❤❤❤"
-
-
-
 @app.route("/health", methods=['GET'])
-def health():
-    if models.checkalive():
-        return "I AM BATMAN ", 200
+def checkalive():
+    alive = True
+    config = {
+        'user': MYSQL_USER,
+        'password': MYSQL_PW,
+        'host': MYSQL_HOST,
+        'port': MYSQL_PORT,
+        'database': MYSQL_DB,
+        'raise_on_warnings': True
+        }      # using mysql.connector
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    if cursor.execute(""" select * from containers_registered """):
+        alive = False   #  FALSE if SQL not reached
     else:
-        return "BAD", 500 
+        print("alive is: ", alive)
+        for (id, weight, unit) in cursor:
+            print(id, weight, unit)
+    cursor.close()
+
+    cnx.close()
+    if alive:
+        return "HOME is where ♥Heart is❤❤❤", 200
+    else:
+        return "This is UN-Healthy", 500
+
 
 @app.route("/batch-weight", methods=['POST'])
 def batch_up():
@@ -48,5 +77,4 @@ def batch_up():
         df.to_sql('containers_registered', conn, if_exists='replace')
     return "fine"
 
-
-app.run(host="0.0.0.0",port=8082, debug=True)
+app.run(host="0.0.0.0", port=5000, debug=True)
