@@ -9,21 +9,22 @@ class QueryHelper():
     #    self.port               
 
     def GetConnection():
-        return pymysql.connect(host="mysql",    # your host, usually localhost
+        return pymysql.connect(host="0.0.0.0",    # your host, usually localhost
                         user="api",                # your username
                         passwd="pass",            # your password
                         db="mysql",                 # name of the data base
-                        port=3306)                  # port of the data base 
+                        port=33060)                  # port of the data base 
 
     def AlterData(query):
+        print(query) 
         returnValue = ""
         if query != "":
             try:
-                db = pymysql.connect(host="mysql",    # your host, usually localhost
+                db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="billdb",               # name of the data base
-                            port=3306)                # port of the data base                                
+                            port=33060)                # port of the data base                                
                 cur = db.cursor()            
                 returnValue =  str(cur.execute(query))
                 db.commit()                               
@@ -32,36 +33,40 @@ class QueryHelper():
                 returnValue = "-1"
                 print("Error in function: GetmysqlData() please check")                
             finally:
-                db.close()                    
+                if db != None:
+                    db.close()                    
         return returnValue
     
     def GetData(query):
         returnValue = ""
+        print(query)
         if query != "":
              try:
-                db = pymysql.connect(host="mysql",    # your host, usually localhost
+                db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="billdb",               # name of the data base
-                            port=3306)                # port of the data base                
+                            port=33060)                # port of the data base                
                 
                 cur = db.cursor()            
                 cur.execute(query)                                
                 data = cur.fetchall()                                            
                 returnValue = data
-             except pymysql.err:
+             except:
                 print("Error in function: GetmysqlData() please check")
                 print(pymysql.err)
                 
              finally:
-                db.close()
-         
+                if db != None:
+                    db.close()
+
         return returnValue
 
     def selectOne():
+        
         value = 0
         try:            
-            db = pymysql.connect(host="mysql",    # your host, usually localhost
+            db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="mysql",               # name of the data base
@@ -73,7 +78,7 @@ class QueryHelper():
         except:
             print("Error in function: selectOne() please check")
         finally:
-            db.close()
-                    
+            if db != None:
+                db.close()       
         return int(value)
 

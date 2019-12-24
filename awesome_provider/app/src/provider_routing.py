@@ -18,19 +18,22 @@ def CheckHealth():
 def PostProvider():
     data= request.json
     result=provider_model.createProvider(data["name"])
-    if result == 0 :
+    if result == 1 :
         return "The name is exist ,Choose another one", 404
-    return f"{data['name']}"
+    return result
 
 
 @app.route('/provider/<int:id>', methods=["PUT"])
 def PutProvider(id):
-    print("YOHO")
+    #print("YOHO")
     data= request.json
+    print(data["name"])
+    print(id)
     result=provider_model.updateProvider(id,data["name"])
-    if result == 0 :
-        return "Wrong id", 404
-    return "put ok" ,200
+    # if result == 1 :
+    #         return "Wrong id", 404
+    # return "put ok" ,200
+    return result
 
 # @app.route('/put/<int:id>', methods=["PUT"])
 # def Check(id):

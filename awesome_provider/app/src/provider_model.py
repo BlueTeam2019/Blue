@@ -16,26 +16,46 @@ class provider_model:
         return isAlive
     
     
+    def isColumnInProviderExist(column,name):
+        isExist=0
+        isExist=queryHelper.QueryHelper.GetData("select Count(*) from Provider where {}='{}';".format(column,name))
+        isExist=isExist[0][0]
+        print(isExist)
+        if isExist == 0: 
+            return 0
+        return 1   
+
+
     def createProvider(name):
-        isNameExist=0
-        #TO-DO:check if there is another way
-        isNameExist="select Count(*) from Provider where name='{}';".format(name)
+        isNameExist=provider_model.isColumnInProviderExist("name",name)
+        result=0
         if isNameExist == 0: 
-            sql="INSERT INTO Provider (`name`) VALUES ('{}');".format(name)
-            getId="select id from Provider where name='{}';".format(name)
-            data={'id': getId }
-            data=json.dumps(data)
-        result=json.dumps(data)
+            print("name is not exist")
+            sql=queryHelper.QueryHelper.GetData("INSERT INTO Provider (`name`) VALUES ('{}');".format(name))
+            getId=queryHelper.QueryHelper.GetData("select id from Provider where name='{}';".format(name))
+            data={'id': getId[0][0] }
+            result=json.dumps(data)
         print(result)
         return result
 
 
     def updateProvider(id ,name):
-        isNameExist="select Count(*) from Provider where id='{}';".format(id)
-        if isNameExist != 0: 
-            sql = "UPDATE Provider SET  name='{}' where id ='{}';".format(name,id)
-            return 1
-        return 0
+        isIdExist=-1
+        isIdExist=provider_model.isColumnInProviderExist("id",id)
+        #all=queryHelper.QueryHelper.GetData("select * from Provider;")
+        #print(all)
+        #isIdExist=isIdExist[0][0]
+        print(isIdExist)
+        if isIdExist != 0: 
+            isNameExist=provider_model.isColumnInProviderExist("name",name)
+            if isNameExist == 0:
+                sql = "UPDATE Provider SET  name='{}' where id ={};".format(name,id)
+                return "Update succedded" ,200
+            return "The name is exist" ,404
+            #isIdExist=queryHelper.QueryHelper.AlterData(sql)
+            #print(isIdExist)
+            
+        return  "The id is not exist" ,404
         
 # SELECT COUNT(*)
 # FROM information_schema.statistics
