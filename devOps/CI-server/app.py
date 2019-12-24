@@ -4,7 +4,7 @@ import yaml
 from flask import Flask, request
 from git import Repo
 import shutil
-import sendReport send_report
+import sendReport 
 
 # Standard Flask app
 app = Flask(__name__)
@@ -44,7 +44,11 @@ def webhook():
 
     # testing build and sending reports
     test_passed, results = exec_tests()
-    send_report(test_passed, results, pusher_email)
+    to=[]
+    with open ('lst_emails', "r")as lst_emails:
+        for email in lst_emails.readlines():
+            to.append(email.replace('\n',''))
+    sendReport.send_report(test_passed, results, to) 
 
     # if the test passed - push to production
     if branch_name == "master" and test_passed:
@@ -63,11 +67,6 @@ def create_repo_of_commit(git_url, repo_dir, commit_hash):
 # implement
 def exec_tests():
     return True, "Test 1: pass\nTest 2: pass"
-
-
-# implement
-def send_report(report, test_passed, results):
-    return True
 
 
 # implement
