@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 # import csv
-# import os
 # import io
 # import models   # importing the methods from models.py
+import os
 import mysql.connector
-from flask import Flask, request
 import pandas as pd
+from flask import Flask, request
 from sqlalchemy import create_engine
+from werkzeug.utils import secure_filename
 
 MYSQL_USER  = 'root'
 MYSQL_PW 	= 'pass'
@@ -54,11 +55,23 @@ def checkalive():
 @app.route("/batch-weight", methods=['POST'])
 def batch_up():
     # 1- receive file (to be parsed) or filename (to be looked in /in)
+    filename=request.form.get('file')
+    if not filename:    #--if file was uploaded, then save it to /in
+        f = request.files['file']
+        if not f:
+            return "NO FILE was mentioned or uploaded"
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(IN_DIR, filename))
+
+    suffix=filename.split('.')[-1].lower()
+
     # 2- check if csv or json, to parse correctly
-    filename=request.files['file'].filename
-    if not filename:
-        return "No file"
-    df = pd.read_csv(IN_DIR+filename)
+    if suffix=='csv':
+        df = pd.read_csv(IN_DIR+filename)
+    elif suffix=='json':
+        # basePath = os.path.dirname(IN_DIR)+'/'
+        # df = pd.read_json(basePath+filename,orient = 'records', dtype={"id":str, "weight":int, "unit":str})
+        df = pd.read_json(IN_DIR+filename)
 
     # 3- maintain a connection to MySQL DB
     # engine = create_engine('mysql+mysqlconnector://root:pass@localhost:8877/weight')
