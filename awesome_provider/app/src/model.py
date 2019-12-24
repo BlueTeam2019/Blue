@@ -1,3 +1,5 @@
+from model_handlers import generate_query_from_excel
+
 
 import json
 
@@ -48,3 +50,16 @@ class Model(object):
             return False, "The name is exist"
 
         return False, "The id is not exist"
+
+    def post_rates_to_db(self, file):
+        table_name = "Rates"
+
+        file_query = generate_query_from_excel(file)
+
+        # First remove all records from the table
+        self.query.alter_data(f'''DELETE FROM {table_name};''')
+        # Insert new values into the table
+        db_records = self.query.alter_data(f'''INSERT INTO {table_name}(product_id, rate, scope) VALUES {file_query};''')
+
+        return int(db_records)
+
