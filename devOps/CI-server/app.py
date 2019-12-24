@@ -72,7 +72,8 @@ def send_report(report, test_passed, results):
 
 # implement
 def clear_test(commit):
-    return True
+    subprocess.run("docker system prune -af", shell=True)
+    subprocess.run("sudo rm -rfd ~/testing/*", shell=True)
 
 
 def build(weight_path, provider_path):
