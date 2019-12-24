@@ -1,10 +1,8 @@
 import os
-from flask import Flask, request
-import datetime
-
+from flask import Flask, request, send_file
 from model import Model
 from query_helper import QueryHelper
-
+from routing_handler import validate_time_format
 
 app = Flask(__name__)
 
@@ -50,14 +48,26 @@ def get_truck(id):
     return "ok", 200
 
 
-def validate_time_format(time_to_validate):
-    date_format = '%Y%m%d%H%M%S'
-    try:
-        date_obj = datetime.datetime.strptime(time_to_validate, date_format)
-        print(date_obj)
-        return True, "Succeeded"
-    except ValueError:
-        return False, "Incorrect data format, should be YYYYMMDDHHMMSS"
+@app.route('/rates', methods=['GET', 'POST'])
+def rates_post():
+    if request.method == 'POST':
+        file = request.files.get('file')
+        if not file or not file.filename:
+            return '400: No file specified.\nMake sure you send the file under `file` key, e.g., `file: file-name`.'
+        resp = model.post_rates_to_db(file)
+        if resp:
+            return f'200: OK\nNumber of records updated : {resp}'
+        return '500: Server Error'
+
+    return send_file("../in/rates.xlsx", as_attachment=True)
+
+    # return '''<!doctype html>
+    # <title>Upload an excel file</title>
+    # <h1>Excel file upload (csv, tsv, csvz, tsvz only)</h1>
+    # <form action="" method=post enctype=multipart/form-data>
+    # <p><input type=file name=file><input type=submit value=Upload>
+    # </form>
+    # '''
 
 
 if __name__ == '__main__':
