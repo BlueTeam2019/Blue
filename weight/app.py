@@ -13,7 +13,7 @@ IN_DIR      = 'in/' # Path to Blue/weight/in folder (batch-weight)
 MYSQL_DB	= 'weight'
 MYSQL_USER  = 'root'
 MYSQL_PW 	= 'pass'
-MYSQL_HOST 	= '0.0.0.0'
+MYSQL_HOST 	= 'mysql'
 MYSQL_PORT	= '3306'
 
 app = Flask(__name__)
@@ -58,7 +58,7 @@ def batch_up():
     elif suffix=='json':
         df = pd.read_json(IN_DIR+filename)
     # 3- maintain a connection to MySQL DB
-    engine = create_engine('mysql+mysqlconnector://'+MYSQL_USER+':'\
+    engine = create_engine('mysql+pymysql://'+MYSQL_USER+':'\
         +MYSQL_PW+'@'+MYSQL_HOST+':'+MYSQL_PORT+'/'+MYSQL_DB, echo=False)
     # 4- send query (INSERT), replacing current table values
     with engine.connect() as conn, conn.begin():
