@@ -42,10 +42,11 @@ def webhook():
     build(repo + weight_path, repo + providor_path)
 
     # testing build and sending reports
-    test_result = exec_tests()
-    send_report(test_result)
+    test_passed, results = exec_tests()
+    send_report(pusher_email, test_passed, results)
 
-    if branch_name == "master":
+    # if the test passed - push to production
+    if branch_name == "master" and test_passed:
         build(repo + weight_path_prod, repo + providor_path_prod)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
 
@@ -58,16 +59,20 @@ def create_repo_of_commit(git_url, repo_dir, commit_hash):
     repo.git.checkout(commit_hash)
 
 
+# implement
 def exec_tests():
-    # return [True, "Test 1: pass\nTest 2: pass"]
+    return True, "Test 1: pass\nTest 2: pass"
+
+
+# implement
+def send_report(report, test_passed, results):
     return True
 
-def send_report(report):
-    return True
 
-
+# implement
 def clear_test(commit):
-    return True
+    subprocess.run("docker system prune -af", shell=True)
+    subprocess.run("sudo rm -rfd ~/testing/*", shell=True)
 
 
 def build(weight_path, provider_path):
@@ -75,18 +80,6 @@ def build(weight_path, provider_path):
     subprocess.run("docker-compose -f {0} up -d ".format(weight_path), shell=True)
     subprocess.run("docker-compose -f {0} build --no-cache".format(provider_path), shell=True)
     subprocess.run("docker-compose -f {0} up -d ".format(provider_path), shell=True)
-
-
-def edit_docker_compose_test(path):
-    with open(path) as f:
-        list_doc = yaml.load(f)
-
-    for sense in list_doc:
-        if sense["name"] == "sense2":
-            sense["value"] = 1234
-
-    with open("my_file.yaml", "w") as f:
-        yaml.dump(list_doc, f)
 
 
 if __name__ == "__main__":
