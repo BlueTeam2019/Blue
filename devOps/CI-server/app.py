@@ -59,8 +59,8 @@ def create_repo_of_commit(git_url, repo_dir, commit_hash):
 
 
 def exec_tests():
+    # return [True, "Test 1: pass\nTest 2: pass"]
     return True
-
 
 def send_report(report):
     return True
