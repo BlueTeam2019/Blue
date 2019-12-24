@@ -9,7 +9,8 @@ services:
         networks: 
             - backend
         environment: 
-            - 'DB_URL=awsome_provider_sql_1'  
+            - 'DB_URL=mysql'
+            - 'DB_USR=root'
             - 'DB_PASS=pass' 
             - 'DB_NAME=billdb'
             - 'DB_PORT=33060'

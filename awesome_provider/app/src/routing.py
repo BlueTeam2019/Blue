@@ -1,5 +1,6 @@
 from flask import Flask, request
 from model import Model
+import os
 import sys
 
 from query_helper import QueryHelper
@@ -17,12 +18,12 @@ def check_health():
 
 
 if __name__ == '__main__':
-    dbUrl = sys.argv[1]
-    dbPass = sys.argv[2]
-    dbUser = sys.argv[3]
-    dbName = sys.argv[4]
-    dbPort = sys.argv[5]
+    dbUrl = os.environ['DB_URL']
+    dbPass = os.environ['DB_USR']
+    dbUser = os.environ['DB_PASS']
+    dbName = os.environ['DB_NAME']
+    dbPort = os.environ['DB_PORT']
     qHelper = QueryHelper(dbUrl, dbUser, dbPass, dbName, dbPort)
     model = Model(qHelper)
 
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', debug=True)

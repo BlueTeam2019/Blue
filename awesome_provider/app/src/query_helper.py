@@ -1,5 +1,6 @@
 import pymysql
 
+
 class QueryHelper:
     def __init__(self, url, usr, password, db_name, port):
         self.url = url
@@ -22,7 +23,7 @@ class QueryHelper:
             try:
                 db = self.get_connection()
                 cur = db.cursor()
-                return_value =  f"{cur.execute(query)}"
+                return_value = f"{cur.execute(query)}"
                 db.commit()
                 print(f"Rows Changed:{return_value}")
 
@@ -40,7 +41,11 @@ class QueryHelper:
         db = None
         if query:
             try:
-                db = self.get_connection()
+                db = pymysql.connect(host=self.url,  # your host, usually localhost
+                                     user=self.usr,  # your username
+                                     passwd=self.password,  # your password
+                                     db=self.dbName,  # name of the data base
+                                     port=self.port)  # port of the data base
 
                 cur = db.cursor()
                 cur.execute(query)
