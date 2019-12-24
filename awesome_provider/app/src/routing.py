@@ -1,17 +1,16 @@
 from flask import Flask, request
-from provider_model import Model
+from model import Model
 import sys
 
-from queryHelper import QueryHelper
+from query_helper import QueryHelper
 
 app = Flask(__name__)
-model = None
+
 
 @app.route('/health', methods=["GET"])
-def CheckHealth():
-    print("in route")
-    isAlive = model.check_health()
-    if isAlive:
+def check_health():
+    is_alive = model.check_health()
+    if is_alive:
         return "OK", 200
     else:
         return "Internal Error", 500
@@ -26,4 +25,4 @@ if __name__ == '__main__':
     qHelper = QueryHelper(dbUrl, dbUser, dbPass, dbName, dbPort)
     model = Model(qHelper)
 
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)

@@ -1,0 +1,36 @@
+version: '2' 
+services:
+  web_test:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+     - "8087:5000"
+    #volumes:
+    # - .:/app
+
+
+
+  mysql_test:
+    build:
+        context: .
+        dockerfile: Dockerfile.sql
+    environment:
+        MYSQL_DATABASE: "weight"
+        MYSQL_USER: "root"
+        MYSQL_PASSWORD: "pass"
+        MYSQL_ROOT_PASSWORD: "pass"
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+        - "3301:3306" 
+    
+    volumes:
+      -  ./DATA:/var/lib/mysql
+
+volumes:
+    DATA:
+
+
+
+
+

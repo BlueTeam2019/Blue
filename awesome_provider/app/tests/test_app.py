@@ -1,11 +1,11 @@
 import unittest
 from unittest import TestCase, mock
-from src import provider_routing
+from src import routing
 
 class AppTest(TestCase):
     # executed prior to each test
     def setUp(self):
-        self.app = provider_routing.app
+        self.app = routing.app
         self.app.config['TESTING'] = True
         self.app.config['DEBUG'] = True
         self.client = self.app.test_client()
