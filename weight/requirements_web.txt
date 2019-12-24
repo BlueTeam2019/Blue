@@ -1,5 +1,5 @@
 flask
 pandas
-mysql-connector-python
-flask-cors
+pymysql
 sqlalchemy
+flask-cors
