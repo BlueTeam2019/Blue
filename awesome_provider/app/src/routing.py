@@ -1,9 +1,5 @@
-import os
 from flask import Flask
-from model import Model
 from model_builder import ModelBuilder
-
-from query_helper import QueryHelper
 
 app = Flask(__name__)
 
