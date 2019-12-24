@@ -2,3 +2,4 @@ Flask
 pymysql
 pandas
 xlrd
+openpyxl
