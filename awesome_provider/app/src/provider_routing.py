@@ -1,6 +1,7 @@
 from flask import Flask, request
 from provider_model import provider_model
 import sys
+import datetime
 
 app = Flask(__name__)
 #model = None
@@ -34,6 +35,30 @@ def PutProvider(id):
     #         return "Wrong id", 404
     # return "put ok" ,200
     return result
+
+
+@app.route('/truck/<int:id>/', methods=["GET"])
+def GetTruck(id ):    
+    timeFrom=request.args["from"]
+    timeTo=request.args["to"]
+    if timeFormat(timeFrom):
+        if timeFormat(timeFrom):
+            print("ok")        
+    print(timeFrom)
+    return "OK" ,200
+
+
+
+def timeFormat(time):
+    date_format = '%Y%m%d%H%M%S'
+    try:
+        date_obj = datetime.datetime.strptime(time, date_format)
+        print(date_obj)
+        result=1
+    except ValueError:
+        print("Incorrect data format, should be YYYYMMDDHHMMSS")
+        result=0
+    return result    
 
 # @app.route('/put/<int:id>', methods=["PUT"])
 # def Check(id):
