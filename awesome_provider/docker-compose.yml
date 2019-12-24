@@ -13,6 +13,7 @@ services:
             - 'DB_USR=root'
             - 'DB_PASS=pass' 
             - 'DB_NAME=billdb'
+            -
             - 'DB_PORT=33060'
             
             

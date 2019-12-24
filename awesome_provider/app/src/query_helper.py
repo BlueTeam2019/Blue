@@ -1,7 +1,7 @@
 import pymysql
 
 
-class QueryHelper:
+class QueryHelper(object):
     def __init__(self, url, usr, password, db_name, port):
         self.url = url
         self.usr = usr

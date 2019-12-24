@@ -19,10 +19,10 @@ def check_health():
 
 if __name__ == '__main__':
     dbUrl = os.environ['DB_URL']
-    dbPass = os.environ['DB_USR']
-    dbUser = os.environ['DB_PASS']
+    dbUser = os.environ['DB_USR']
+    dbPass = os.environ['DB_PASS']
     dbName = os.environ['DB_NAME']
-    dbPort = os.environ['DB_PORT']
+    dbPort = int(os.environ['DB_PORT'])
     qHelper = QueryHelper(dbUrl, dbUser, dbPass, dbName, dbPort)
     model = Model(qHelper)
 
