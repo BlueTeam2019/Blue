@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import queryHelper
 import json
 class provider_model:
@@ -62,3 +63,15 @@ class provider_model:
 # WHERE TABLE_SCHEMA = DATABASE()
 #   AND TABLE_NAME = 'Provider' 
 #   AND INDEX_NAME = 'name'; 
+=======
+
+class Model(object):
+    def __init__(self, query_helper):
+        self.query = query_helper
+
+    def check_health(self):
+        data = self.query.select_one()
+        if int(data[0][0]) == 1:
+            return True
+        return False
+>>>>>>> ccadbb36047d4ae5581542c5b701ccd6b0bd8684
