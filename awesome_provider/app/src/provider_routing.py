@@ -3,7 +3,6 @@ import provider_model
 import sys
 
 app = Flask(__name__)
-#model = None
 
 @app.route('/health', methods=["GET"])
 def CheckHealth():
@@ -14,5 +13,17 @@ def CheckHealth():
     else:
         return "Internal Error", 500 
 
+@app.route('/truck', methods=["POST"])
+def register_truck():
+    is_successful = False
+    try:
+        is_successful = provider_model.provider_model.register_truck(request.get_json())
+    except:
+        print("Error")
 
-app.run(host='0.0.0.0')
+    if is_successful:
+        return "OK",200
+    else:
+        return "Invalid Request", 400
+
+app.run(host='0.0.0.0', debug=True)
