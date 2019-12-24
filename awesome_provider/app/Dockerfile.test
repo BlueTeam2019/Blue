@@ -4,5 +4,4 @@ WORKDIR /app
 RUN python3 -m pip install --no-cache-dir -r requierments.txt
 COPY . /app
 
-
 CMD  python3 -m unittest discover -s tests -p 'test_*.py'

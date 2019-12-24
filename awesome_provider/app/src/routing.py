@@ -1,7 +1,7 @@
-from flask import Flask, request
-from model import Model
 import os
-import sys
+from flask import Flask
+from model import Model
+from model_builder import ModelBuilder
 
 from query_helper import QueryHelper
 
@@ -18,12 +18,6 @@ def check_health():
 
 
 if __name__ == '__main__':
-    dbUrl = os.environ['DB_URL']
-    dbUser = os.environ['DB_USR']
-    dbPass = os.environ['DB_PASS']
-    dbName = os.environ['DB_NAME']
-    dbPort = int(os.environ['DB_PORT'])
-    qHelper = QueryHelper(dbUrl, dbUser, dbPass, dbName, dbPort)
-    model = Model(qHelper)
+    model = ModelBuilder().build()
 
     app.run(host='0.0.0.0', debug=True)
