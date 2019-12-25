@@ -1,0 +1,5 @@
+flask
+pandas
+pymysql
+sqlalchemy
+flask-cors

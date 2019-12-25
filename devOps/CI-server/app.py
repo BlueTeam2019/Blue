@@ -12,8 +12,8 @@ app = Flask(__name__)
 # Configuration
 git_url = "git@github.com:BlueTeam2019/Blue.git"
 repo_dir = "/home/ubuntu/testing/"
-weight_path = "/weight/docker-compose_test.yml"
-providor_path = "/awesome_provider/docker-compose.yml"
+weight_path_test = "/weight/docker-compose_test.yml"
+providor_path_test = "/awesome_provider/docker-compose.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
@@ -28,6 +28,9 @@ def hello_world():
 # webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    # trying to free up space
+    clean_env()
+
     # parsing post request
     content = request.json
     pusher = content["pusher"]["name"]
@@ -40,7 +43,7 @@ def webhook():
     create_repo_of_commit(git_url, repo, head_commit)
 
     # building testing build
-    build(repo + weight_path, repo + providor_path)
+    build(repo + weight_path_test, repo + providor_path_test)
 
     # testing build and sending reports
     test_passed, results = exec_tests()
@@ -51,7 +54,7 @@ def webhook():
         build(repo + weight_path_prod, repo + providor_path_prod)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
 
-    clear_test(head_commit)
+    clean_env()
     return "CI server webhooked".format(content)
 
 
@@ -65,17 +68,18 @@ def exec_tests():
     return True, "Test 1: pass\nTest 2: pass"
 
 
-# implement
-def clear_test(commit):
+# deleting unused images containers and volumes
+def clean_env():
     subprocess.run("docker system prune -af", shell=True)
     subprocess.run("sudo rm -rfd ~/testing/*", shell=True)
+    subprocess.run("sudo rm -rfd ~/master_hist/*", shell=True)
 
 
 def build(weight_path, provider_path):
     subprocess.run("docker-compose -f {0} build --no-cache".format(weight_path), shell=True)
-    subprocess.run("docker-compose -f {0} up -d ".format(weight_path), shell=True)
+    subprocess.run("docker-compose -f {0} up -d".format(weight_path), shell=True)
     subprocess.run("docker-compose -f {0} build --no-cache".format(provider_path), shell=True)
-    subprocess.run("docker-compose -f {0} up -d ".format(provider_path), shell=True)
+    subprocess.run("docker-compose -f {0} up -d".format(provider_path), shell=True)
 
 
 if __name__ == "__main__":
