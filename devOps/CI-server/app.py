@@ -76,7 +76,7 @@ def webhook():
     test_version_hash = "Test server: " + branch_name + " - " + head_commit
 
     # testing build and sending reports
-    test_passed, results = exec_tests(providor_run_tests_path, weight_run_tests_path)
+    test_passed, results = exec_tests(repo + providor_run_tests_path, repo + weight_run_tests_path)
     sendReport.send_report(test_passed, results, pusher_email)
 
     # if the test passed - push to production
