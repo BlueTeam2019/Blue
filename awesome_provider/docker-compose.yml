@@ -24,9 +24,9 @@ services:
         networks: 
             - backend
         volumes: 
-            - ./container_data:/var/lib/mysql
+            - sql_data:/var/lib/mysql
             - db:/docker-entrypoint-initdb.d
-            - ./app/in:/root/app/in
+            - in:/root/app/in
         environment: 
             - MYSQL_ROOT_PASSWORD=pass        
             - MYSQL_PASSWORD=pass            
@@ -34,7 +34,7 @@ services:
 networks:
     backend:
 volumes: 
-    container_data:
+    sql_data:
     db:
     in:
     
