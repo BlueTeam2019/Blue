@@ -54,7 +54,7 @@ class Model(object):
         check_provider_query = f"SELECT COUNT(*) FROM Provider WHERE id={provider_id}"
         provider_count = self.query.get_data(check_provider_query)
         if provider_count:
-            if provider_count[0][0] == "1":
+            if provider_count[0][0] == 1:
                 provider_exist = True
 
         return provider_exist
