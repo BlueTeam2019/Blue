@@ -18,29 +18,17 @@ providor_path_test = "/awesome_provider/docker-compose.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
-#To do: update the pathes
-#Will success:
-#providor_run_tests_path = "/devOps/CI-server/temp/success"
-#weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
-#Will fail:
+# To do: update the pathes
+# Will success:
+# providor_run_tests_path = "/devOps/CI-server/temp/success"
+# weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
+# Will fail:
 providor_run_tests_path = "/devOps/CI-server/temp/fail"
 weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
-
 
 # global var
 version_hash = "production is down."
 test_version_hash = "testing is down"
-
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
 
 
 # Standard Flask endpoint
@@ -65,7 +53,10 @@ def webhook():
     pusher_email = content["pusher"]["email"]
     head_commit = content["head_commit"]["id"]
     branch_name = os.path.basename(content["ref"])
-    cprint("{0} was pushed by {1} on branch {2}\nemail address - {3}\nstart processing...".format(head_commit, pusher, branch_name, pusher_email), attrs=['bold'])
+    cprint("{0} was pushed by {1} on branch {2}\nemail address - {3}\nstart processing...".format(head_commit, pusher,
+                                                                                                  branch_name,
+                                                                                                  pusher_email),
+           attrs=['bold'])
 
     # trying to free up space
     print("\n\n")
@@ -109,13 +100,13 @@ def exec_tests(providor_path, weight_path):
     from testExecProvidor import runTesting
     sys.path.insert(1, weight_path)
     from testExecWeight import execTesting
-    state, error_list = runTesting() 
+    state, error_list = runTesting()
     state1, error_list1 = execTesting()
     if state == True and state1 == True:
         return True, []
     else:
-        return False, error_list + error_list1 + ["%d tests failed" %len(error_list + error_list1)]
-    
+        return False, error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+
 
 # deleting unused images containers and volumes
 def clean_env():
