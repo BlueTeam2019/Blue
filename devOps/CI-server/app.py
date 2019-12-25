@@ -18,10 +18,11 @@ weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
 
-
 # global var
 version_hash = "production is down."
 test_version_hash = "testing is down"
+
+
 # Standard Flask endpoint
 @app.route("/", )
 def hello_world():
