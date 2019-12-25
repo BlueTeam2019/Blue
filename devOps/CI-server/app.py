@@ -5,6 +5,7 @@ from flask import Flask, request
 from git import Repo
 import shutil
 import sendReport
+from termcolor import colored, cprint
 
 # Standard Flask app
 app = Flask(__name__)
@@ -18,25 +19,50 @@ weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
 
+# global var
+version_hash = "production is down."
+test_version_hash = "testing is down"
+
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 # Standard Flask endpoint
 @app.route("/", )
 def hello_world():
-    return "CI server is listening..."
+    global version_hash
+    global test_version_hash
+    return version_hash + "<br>" + test_version_hash
 
 
 # webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    # trying to free up space
-    clean_env()
+    print(colored('Incoming push!!!', 'red', attrs=['reverse', 'blink']))
+    global version_hash
+    global test_version_hash
 
     # parsing post request
+    cprint('Parsing github webhook POST request...', 'red', 'on_white', attrs=['bold'])
     content = request.json
     pusher = content["pusher"]["name"]
     pusher_email = content["pusher"]["email"]
     head_commit = content["head_commit"]["id"]
     branch_name = os.path.basename(content["ref"])
+    cprint("{0} was pushed by {1} on branch {2}\nemail address - {3}\nstart processing...".format(head_commit, pusher, branch_name, pusher_email), attrs=['bold'])
+
+    # trying to free up space
+    print("\n\n")
+    cprint('Freeing up space...', 'red', 'on_white', attrs=['bold'])
+    clean_env()
 
     # creating a local repository for testing
     repo = repo_dir + head_commit
@@ -44,6 +70,7 @@ def webhook():
 
     # building testing build
     build(repo + weight_path_test, repo + providor_path_test)
+    test_version_hash = "Test server: " + branch_name + " - " + head_commit
 
     # testing build and sending reports
     test_passed, results = exec_tests()
@@ -53,6 +80,7 @@ def webhook():
     if branch_name == "master" and test_passed:
         build(repo + weight_path_prod, repo + providor_path_prod)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
+        version_hash = "Production server: " + branch_name + " - " + head_commit
 
     clean_env()
     return "CI server webhooked".format(content)
