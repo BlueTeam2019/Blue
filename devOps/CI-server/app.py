@@ -115,12 +115,12 @@ def exec_tests(providor_path, weight_path):
     from testExecProvidor import runTesting
     sys.path.insert(1, weight_path)
     from testExecWeight import execTesting
-    state, error_list = runTesting()
-    state1, error_list1 = execTesting()
-    if state == True and state1 == True:
+    providors_state, providors_error_list = runTesting()
+    weights_state, weights_error_list = execTesting()
+    if providors_state == True and weights_state == True:
         return True, []
     else:
-        combined_tests_list = error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+        combined_tests_list = providors_error_list + weights_error_list + ["%d tests failed" % len(providors_error_list + weights_error_list)]
         return False, combined_tests_list
 
 
