@@ -63,7 +63,8 @@ def webhook():
     start processing...""".format(head_commit, pusher, branch_name, pusher_email), attrs=['bold'])
 
     # trying to free up space
-    cprint('\n\nFreeing up space...', 'red', 'on_white', attrs=['bold'])
+    print("\n\n")
+    cprint('Freeing up space...', 'red', 'on_white', attrs=['bold'])
     clean_env()
 
     # creating a local repository for testing
