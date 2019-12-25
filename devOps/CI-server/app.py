@@ -44,11 +44,7 @@ def webhook():
 
     # testing build and sending reports
     test_passed, results = exec_tests()
-    to=[]
-    with open ('lst_emails', "r")as lst_emails:
-        for email in lst_emails.readlines():
-            to.append(email.replace('\n',''))
-    sendReport.send_report(test_passed, results, to) 
+    sendReport.send_report(test_passed, results, pusher_email) 
 
     # if the test passed - push to production
     if branch_name == "master" and test_passed:
