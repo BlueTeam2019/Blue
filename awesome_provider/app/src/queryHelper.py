@@ -12,7 +12,7 @@ class QueryHelper():
         return pymysql.connect(host="mysql",    # your host, usually localhost
                         user="api",                # your username
                         passwd="pass",            # your password
-                        db="mysql",                 # name of the data base
+                        db="billdb",                 # name of the data base
                         port=3306)                  # port of the data base 
 
     def AlterData(query):
