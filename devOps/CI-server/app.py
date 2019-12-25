@@ -51,16 +51,13 @@ def webhook():
     global test_version_hash
 
     # parsing post request
-    print("\n\n")
     cprint('Parsing github webhook POST request...', 'red', 'on_white', attrs=['bold'])
     content = request.json
     pusher = content["pusher"]["name"]
     pusher_email = content["pusher"]["email"]
     head_commit = content["head_commit"]["id"]
     branch_name = os.path.basename(content["ref"])
-    cprint("""{0} was pushed by {1} on branch {2}\n
-    email address - {3} \n
-    start processing...""".format(head_commit, pusher, branch_name, pusher_email), attrs=['bold'])
+    cprint("{0} was pushed by {1} on branch {2}\nemail address - {3}\nstart processing...".format(head_commit, pusher, branch_name, pusher_email), attrs=['bold'])
 
     # trying to free up space
     print("\n\n")
