@@ -27,6 +27,9 @@ def hello_world():
 # webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    # trying to free up space
+    clean_env()
+
     # parsing post request
     content = request.json
     pusher = content["pusher"]["name"]
@@ -50,7 +53,7 @@ def webhook():
         build(repo + weight_path_prod, repo + providor_path_prod)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
 
-    clear_test(head_commit)
+    clean_env()
     return "CI server webhooked".format(content)
 
 
@@ -69,8 +72,8 @@ def send_report(report, test_passed, results):
     return True
 
 
-# implement
-def clear_test(commit):
+# deleting unused images containers and volumes
+def clean_env():
     subprocess.run("docker system prune -af", shell=True)
     subprocess.run("sudo rm -rfd ~/testing/*", shell=True)
 
