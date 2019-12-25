@@ -1,25 +1,31 @@
-<<<<<<< HEAD
 from flask import Flask, request
-from provider_model import provider_model
+
 import sys
 import datetime
+
+import os
+
+from model import Model
+
+
+from query_helper import QueryHelper
+
+
+
 
 app = Flask(__name__)
 #model = None
 
 @app.route('/health', methods=["GET"])
-def CheckHealth():
-    print("in route")
-    isAlive = provider_model.CheckHealth()
-    if isAlive:
+def check_health():
+    if model.check_health():
         return "OK", 200
-    else:
-        return "Internal Error", 500
+    return "Internal Error", 500
 
 @app.route('/provider', methods=["POST"])
 def PostProvider():
     data= request.json
-    result=provider_model.createProvider(data["name"])
+    result=model.createProvider(data["name"])
     if result == 1 :
         return "The name is exist ,Choose another one", 404
     return result
@@ -31,7 +37,7 @@ def PutProvider(id):
     data= request.json
     print(data["name"])
     print(id)
-    result=provider_model.updateProvider(id,data["name"])
+    result=model.updateProvider(id,data["name"])
     # if result == 1 :
     #         return "Wrong id", 404
     # return "put ok" ,200
@@ -66,26 +72,9 @@ def timeFormat(time):
 #     return "put" ,200
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True, port=8080)          
-=======
-import os
-from flask import Flask, request
-from model import Model
-
-
-from query_helper import QueryHelper
-
-app = Flask(__name__)
-
-
-@app.route('/health', methods=["GET"])
-def check_health():
-    if model.check_health():
-        return "OK", 200
-    return "Internal Error", 500
-
-
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0", debug=True, port=8080)    
+# 
 if __name__ == '__main__':
     db_url = os.environ['DB_URL']
     db_user = os.environ['DB_USR']
@@ -96,5 +85,7 @@ if __name__ == '__main__':
     query_helper = QueryHelper(db_url, db_user, db_pass, db_name, db_port)
     model = Model(query_helper)
 
-    app.run(host='0.0.0.0', debug=bool(do_debug))
->>>>>>> ccadbb36047d4ae5581542c5b701ccd6b0bd8684
+    app.run(host='0.0.0.0', debug=bool(do_debug))  
+        
+
+

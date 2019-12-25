@@ -1,23 +1,23 @@
 <<<<<<< HEAD
 import queryHelper
 import json
-class provider_model:
+class Model(object):
     #def __init__(self , url, usr, password, dbName):
      #   self.query = QueryHelper(url, usr, password, dbName)
+ def __init__(self, query_helper):
+        self.query = query_helper
 
-    def CheckHealth():
-        print("in CheckHealth()")
-        #TODO: Call connection to db method / run select 1 from helper        
-        isAlive = False
-        try:        
-            if queryHelper.QueryHelper.selectOne() == 1:
-                isAlive = True
-        except:
-            print("DB ERROR")
-        return isAlive
+    def check_health(self):
+        data = self.query.select_one()
+        if int(data[0][0]) == 1:
+            return True
+        return False
+
+
+
     
     
-    def isColumnInProviderExist(column,name):
+    def isColumnInProviderExist(self,column,name):
         isExist=0
         isExist=queryHelper.QueryHelper.GetData("select Count(*) from Provider where {}='{}';".format(column,name))
         isExist=isExist[0][0]
@@ -40,9 +40,9 @@ class provider_model:
         return result
 
 
-    def updateProvider(id ,name):
+    def updateProvider(self,id ,name):
         isIdExist=-1
-        isIdExist=provider_model.isColumnInProviderExist("id",id)
+        isIdExist=isColumnInProviderExist("id",id)
         #all=queryHelper.QueryHelper.GetData("select * from Provider;")
         #print(all)
         #isIdExist=isIdExist[0][0]
