@@ -3,6 +3,7 @@ from flask import Flask, request, send_file
 
 from bill_helper import BillHelper
 from model import Model
+from model_builder import ModelBuilder
 from query_helper import QueryHelper
 from routing_handler import validate_time_format
 
@@ -81,16 +82,8 @@ def rates_post():
 
 
 if __name__ == '__main__':
-    db_url = os.environ['DB_URL']
-    db_user = os.environ['DB_USR']
-    db_pass = os.environ['DB_PASS']
-    db_name = os.environ['DB_NAME']
-    db_port = int(os.environ['DB_PORT'])
     do_debug = os.environ.get('DEBUG', False)
     weight_url = os.environ.get('WEIGHT_URL')
-
-    query_helper = QueryHelper(db_url, db_user, db_pass, db_name, db_port)
-    model = Model(query_helper)
-    bill_helper = BillHelper(weight_url ,model)
+    bill_helper = BillHelper(weight_url ,ModelBuilder())
 
     app.run(host='0.0.0.0', debug=bool(do_debug))
