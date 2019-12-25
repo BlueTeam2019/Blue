@@ -84,7 +84,7 @@ def webhook():
         cprint('All tests passed! sending report...', 'green', attrs=['bold'])
     else:
         cprint('Some tests failed! will not update production. sending report...', 'red', attrs=['bold'])
-    sendReport.send_report(test_passed, results, pusher_email)
+    sendReport.send_report(test_passed, results, pusher_email, head_commit, branch_name)
 
     # if the test passed - push to production
     if branch_name == "master" and test_passed:
@@ -119,8 +119,8 @@ def exec_tests(providor_path, weight_path):
     if state == True and state1 == True:
         return True, []
     else:
-        return False, error_list + error_list1 + ["%d tests failed" %len(error_list + error_list1)]
-   
+        return False, error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+
 
 # deleting unused images containers and volumes
 def clean_env():
