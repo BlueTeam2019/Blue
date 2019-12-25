@@ -1,4 +1,4 @@
-version: '2' 
+version: '2'
 services:
   web:
     build:
@@ -6,9 +6,6 @@ services:
         dockerfile: Dockerfile
     ports:
      - "8082:5000"
-    #volumes:
-    # - .:/app
-
 
 
   mysql:
@@ -22,12 +19,9 @@ services:
         MYSQL_ROOT_PASSWORD: "pass"
         MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-        - "3306:3306" 
-    
+        - "3306:3306"
+    volumes:
+      -  DATA:/var/lib/mysql
 
-
-
-
-
-
-
+volumes:
+    DATA:
