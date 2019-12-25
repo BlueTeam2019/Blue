@@ -21,11 +21,11 @@ master_history_path = "/home/ubuntu/master_hist"
 
 # To do: update the pathes
 # Will success:
-# providor_run_tests_path = "/devOps/CI-server/temp/success"
-# weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
+providor_run_tests_path = "/devOps/CI-server/temp/success"
+weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
 # Will fail:
-providor_run_tests_path = "/devOps/CI-server/temp/fail"
-weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
+# providor_run_tests_path = "/devOps/CI-server/temp/fail"
+# weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
 
 # global var
 version_hash = "production is down."
@@ -121,9 +121,6 @@ def exec_tests(providor_path, weight_path):
         return True, []
     else:
         combined_tests_list = error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
-        print("\n\n")
-        print(combined_tests_list)
-        print("\n\n")
         return False, combined_tests_list
 
 
