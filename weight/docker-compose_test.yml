@@ -6,8 +6,7 @@ services:
         dockerfile: Dockerfile
     ports:
      - "8087:5000"
-    #volumes:
-    # - .:/app
+
 
 
 
