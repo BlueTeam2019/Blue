@@ -35,36 +35,31 @@ def put_provider(id):
 
 
 @app.route('/truck/<int:id>/', methods=["GET"])
-def GetTruck(id ):    
-    timeFrom=request.args["from"]
-    timeTo=request.args["to"]
-    if timeFormat(timeFrom)[0]:
-        if timeFormat(timeFrom)[0]:
-            print("ok")        
-    print(timeFrom)
-    return "OK" ,200
+def get_truck(id):
+    time_from = request.args["from"]
+    time_to = request.args["to"]
+    valid_time_from_format = validate_time_format(time_from)
+    valid_time_to_format = validate_time_format(time_to)
+    if not valid_time_from_format[0]:
+        return f"from: {valid_time_from_format[1]}", 404
+    if not valid_time_to_format[0]:
+        return f"To:{valid_time_to_format[1]}", 404
+
+    # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
+    print("ok")
+    return "ok", 200
 
 
-
-def timeFormat(time):
+def validate_time_format(time_to_validate):
     date_format = '%Y%m%d%H%M%S'
     try:
-        date_obj = datetime.datetime.strptime(time, date_format)
+        date_obj = datetime.datetime.strptime(time_to_validate, date_format)
         print(date_obj)
-        return True  , "Succedded"
+        return True, "Succeeded"
     except ValueError:
-        return  False , "Incorrect data format, should be YYYYMMDDHHMMSS"
+        return False, "Incorrect data format, should be YYYYMMDDHHMMSS"
 
 
-
-# @app.route('/put/<int:id>', methods=["PUT"])
-# def Check(id):
-#     return "put" ,200
-
-
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0", debug=True, port=8080)    
-# 
 if __name__ == '__main__':
     db_url = os.environ['DB_URL']
     db_user = os.environ['DB_USR']
@@ -76,6 +71,3 @@ if __name__ == '__main__':
     model = Model(query_helper)
 
     app.run(host='0.0.0.0', debug=bool(do_debug))  
-        
-
-
