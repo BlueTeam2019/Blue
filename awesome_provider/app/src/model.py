@@ -1,4 +1,3 @@
-import json
 import requests
 from model_handlers import generate_query_from_excel
 
@@ -28,8 +27,9 @@ class Model(object):
         return 0
 
     def get_weights(self, from_time, to_time):
-        # issue: pass as parameters ?from_t=<int>&to_t=<int>&f="out"
-        response = requests.get(self.weight_url, from_time, to_time, "out")
+        response = requests.get(self.weight_url + f"?from={from_time}&"
+                                                  f"to_time={to_time}&"
+                                                  f"filter=OUT);
         return json.loads(response)
 
     # return trucks {} hash_set by provider id

@@ -5,7 +5,7 @@ import json
 class BillHelper(object):
 
     def __init__(self, model, wight_url):
-        self.model = model
+        self.model_ = model
         self.weight_url = wight_url
 
     def get_json(self, id, from_t, to_t, total_pay, \
@@ -49,7 +49,7 @@ class BillHelper(object):
         if session['neto'] == 'na': return 0
 
         if session['produce'] not in products:
-            rate = self.get_rate(id, session)
+            rate = self.get_rate(id, session['produce'])
             to_add = self.create_product(rate, session)
             products[session['produce']] = to_add
         p = products[session['produce']]
@@ -64,20 +64,20 @@ class BillHelper(object):
                   'rate': rate, 'total_kg': 0, 'pay': 0}
         return to_add
 
-    def get_rate(self, id, session):
-        # return self.model \
+    def get_rate(self, id, produce):
+        # return self.model_ \
         #    .get_rate(session['product'], id)
 
         ##  returns mock ##
 
-        if session['produce'] == "appal": return 1
-        if session['produce'] == "banana": return 2
+        if produce == "appal": return 1
+        if produce == "banana": return 2
 
     def get_weights(self, from_t, to_t):
         # issue: pass as parameters ?from_t=<int>&to_t=<int>&f="out"
         # response = requests.get(self.weight_url, from_t, to_t, "out")
         # return json.loads("response")
-
+        return self.model_.get_weights(from_t, to_t)
         ##  returns mock ##
 
         return [{"id": 1,
@@ -125,9 +125,9 @@ class BillHelper(object):
                 ]
 
     def get_provider_name(self, id):
-        return self.model.get_provider_by_id(id)
-        #return "prov name"
+        #return self.model_.get_provider_by_id(id)
+        return "prov name"
 
     def get_truck(self, id):
-        return self.model.get_trucks(id)
-        #return {1, 2, 3, 4}
+        #return self.model_.get_trucks(id)
+        return [[1],[3],[3],[4]]
