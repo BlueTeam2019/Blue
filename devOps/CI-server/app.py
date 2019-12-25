@@ -49,16 +49,21 @@ def webhook():
     print(colored('Incoming push!!!', 'red', attrs=['reverse', 'blink']))
     global version_hash
     global test_version_hash
-    # trying to free up space
-    cprint('Freeing up space...', 'red', 'on_white', attrs=['bold'])
-    clean_env()
 
     # parsing post request
+    cprint('\n\nParsing github webhook POST request...', 'red', 'on_white', attrs=['bold'])
     content = request.json
     pusher = content["pusher"]["name"]
     pusher_email = content["pusher"]["email"]
     head_commit = content["head_commit"]["id"]
     branch_name = os.path.basename(content["ref"])
+    cprint("""\n\n{0} was pushed by {1} on branch {2}\n
+    email address - {3} \n
+    start processing...""".format(head_commit, pusher, pusher_email, branch_name), attrs=['bold'])
+
+    # trying to free up space
+    cprint('\n\nFreeing up space...', 'red', 'on_white', attrs=['bold'])
+    clean_env()
 
     # creating a local repository for testing
     repo = repo_dir + head_commit
