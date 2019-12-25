@@ -19,20 +19,22 @@ class BillHelper(object):
     def get_data(self, id, from_t, to_t):
         weights_set = self.get_weights(from_t, to_t)
         weights_dict = self.map_weight(weights_set)
-        trucks = self.get_truck(id)
+        trucks_table = self.get_truck(id)
         provider_name = self.get_provider_name(id)
+        rates = self.get_rates(id)
         products = {}
         total_pay = 0
         truck_count = 0
         session_count = 0
 
-        for t in trucks:
-            if t[0] in weights_dict:
+        for row in trucks_table:
+            if row[0] in weights_dict:
                 truck_count += 1
-                for session in weights_dict[t[0]]:
+                for session in weights_dict[row[0]]:
                     session_count += 1
                     total_pay = \
-                        total_pay + self.add_weight(id, products, session)
+                        total_pay + self.add_weight(id, products,
+                                                    session, rates)
 
         return total_pay, truck_count, \
                session_count, products, provider_name
@@ -45,11 +47,10 @@ class BillHelper(object):
             map[id].append(w)
         return map
 
-    def add_weight(self, id, products, session):
+    def add_weight(self, id, products, session, rates):
         if session['neto'] == 'na': return 0
-
         if session['produce'] not in products:
-            rate = self.get_rate(id, session['produce'])
+            rate = rates[session['produce']]
             to_add = self.create_product(rate, session)
             products[session['produce']] = to_add
         p = products[session['produce']]
@@ -64,20 +65,27 @@ class BillHelper(object):
                   'rate': rate, 'total_kg': 0, 'pay': 0}
         return to_add
 
-    def get_rate(self, id, produce):
-        # return self.model_ \
-        #    .get_rate(session['product'], id)
+    def get_rates(self, id):
+        table = self.model_.get_rates(id)
+        rates = {}
+        for row in table:
+            if row[3] == id:
+                rates[row[0]] = row[1]
+            elif not rates[row[0]] and row[3] == "ALL":
+                rates[row[0]] = row[1]
+        return rates
 
-        ##  returns mock ##
+    def get_provider_name(self, id):
+        return self.model_.get_provider_by_id(id)
 
-        if produce == "appal": return 1
-        if produce == "banana": return 2
+    def get_truck(self, id):
+        return self.model_.get_trucks(id)
 
     def get_weights(self, from_t, to_t):
         # issue: pass as parameters ?from_t=<int>&to_t=<int>&f="out"
         # response = requests.get(self.weight_url, from_t, to_t, "out")
         # return json.loads("response")
-        return self.model_.get_weights(from_t, to_t)
+        #return self.model_.get_weights(from_t, to_t)
         ##  returns mock ##
 
         return [{"id": 1,
@@ -123,11 +131,3 @@ class BillHelper(object):
                  "produce": "banana",
                  "containers": []}
                 ]
-
-    def get_provider_name(self, id):
-        #return self.model_.get_provider_by_id(id)
-        return "prov name"
-
-    def get_truck(self, id):
-        #return self.model_.get_trucks(id)
-        return [[1],[3],[3],[4]]

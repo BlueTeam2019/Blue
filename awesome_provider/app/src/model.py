@@ -22,14 +22,13 @@ class Model(object):
             return "ID is not exist"
         return  table[0][1]
 
-    #return int product rate by provider id
-    def get_rate(self, products, id):
-        return 0
+    def get_rates(self, id):
+        return self.query.get_data(f"select * from Rates ;")
 
     def get_weights(self, from_time, to_time):
         response = requests.get(self.weight_url + f"?from={from_time}&"
                                                   f"to_time={to_time}&"
-                                                  f"filter=OUT);
+                                                  f"filter=OUT")
         return json.loads(response)
 
     # return trucks {} hash_set by provider id
