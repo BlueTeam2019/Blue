@@ -19,15 +19,22 @@ providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
 
 
+# global var
+version_hash = "production is down."
+test_version_hash = "testing is down"
 # Standard Flask endpoint
 @app.route("/", )
 def hello_world():
-    return "CI server is listening..."
+    global version_hash
+    global test_version_hash
+    return version_hash + "<br>" + test_version_hash
 
 
 # webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    global version_hash
+    global test_version_hash
     # trying to free up space
     clean_env()
 
@@ -44,6 +51,7 @@ def webhook():
 
     # building testing build
     build(repo + weight_path_test, repo + providor_path_test)
+    test_version_hash = "Test server: " + branch_name + " - " + head_commit
 
     # testing build and sending reports
     test_passed, results = exec_tests()
@@ -53,6 +61,7 @@ def webhook():
     if branch_name == "master" and test_passed:
         build(repo + weight_path_prod, repo + providor_path_prod)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
+        version_hash = "Production server: " + branch_name + " - " + head_commit
 
     clean_env()
     return "CI server webhooked".format(content)
