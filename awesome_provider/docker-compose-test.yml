@@ -17,7 +17,7 @@ services:
             - DB_USR=root
             
     billing_sql_test:
-        container_name: billing_sql_test
+        sql_test_data: billing_sql_test
         build: ./db_scripts
         ports: 
             - "3408:3306"
@@ -25,7 +25,7 @@ services:
             - backend
         volumes:
             - dbtest:/docker-entrypoint-initdb.d
-            - ./app/intest:/root/app/in
+            - intest:/root/app/in
             - container_data_test:/docker-entrypoint-initdb.d
         environment: 
             - MYSQL_ROOT_PASSWORD=pass
@@ -34,7 +34,7 @@ services:
 networks:
     backend:
 volumes: 
-    container_data_test:
+    sql_test_data:
     dbtest:
     intest:
     
