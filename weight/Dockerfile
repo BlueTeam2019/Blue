@@ -4,8 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN pip install flask mysql-connector-python flask-cors
-
+RUN pip install --upgrade -r requirements_web.txt
 ENTRYPOINT ["python"]
 
 CMD ["app.py"]

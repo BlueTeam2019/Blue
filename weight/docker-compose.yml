@@ -9,8 +9,6 @@ services:
     #volumes:
     # - .:/app
 
-
-
   mysql:
     build:
         context: .
@@ -24,10 +22,5 @@ services:
     ports:
         - "3306:3306" 
     
-
-
-
-
-
-
-
+volumes:
+  mysql-db:
