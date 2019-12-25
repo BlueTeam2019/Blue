@@ -14,6 +14,7 @@ services:
             - DB_PASS=pass
             - DB_NAME=billdb
             - DB_PORT=3306
+            - PYTHONUNBUFFERED=1
 
     mysql:
         container_name: mysql
