@@ -1,2 +1,8 @@
 DATA
 /DATA
+.idea/
+devOps/CI-server/VIRTUAL/
+devOps/CI-server/app.pyc
+devOps/CI-server/~/
+weight/sandbox/
+weight/__pycache__/
