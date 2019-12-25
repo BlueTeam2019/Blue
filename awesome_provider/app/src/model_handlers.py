@@ -1,4 +1,4 @@
-import pandasg
+import pandas
 
 
 def generate_query_from_excel(file):
