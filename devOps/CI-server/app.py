@@ -81,9 +81,9 @@ def clean_env():
 
 def build(weight_path, provider_path):
     subprocess.run("docker-compose -f {0} build --no-cache".format(weight_path), shell=True)
-    subprocess.run("docker-compose -f {0} up -d ".format(weight_path), shell=True)
+    subprocess.run("docker-compose -f {0} up -d --remove-orphans".format(weight_path), shell=True)
     subprocess.run("docker-compose -f {0} build --no-cache".format(provider_path), shell=True)
-    subprocess.run("docker-compose -f {0} up -d ".format(provider_path), shell=True)
+    subprocess.run("docker-compose -f {0} up -d --remove-orphans".format(provider_path), shell=True)
 
 
 if __name__ == "__main__":
