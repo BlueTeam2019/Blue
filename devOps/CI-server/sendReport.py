@@ -2,19 +2,18 @@ from flask import Flask, request
 import os, sys, smtplib
 from email.mime.text import MIMEText as text
 
-def send_report(success,file_fails, pusher_email):
+def send_report(success,results, pusher_email):
     result = True
     gmail_user = 'ci.server.blue@gmail.com'
     gmail_password = 'ci.server.blue123'
     sent_from = gmail_user
-    to = [pusher_email]
+    to = [pusher_email,'lehacohen160@gmail.com']
 
     message = 'Build completed successfully'
     body = message
     if not success:
         message = 'Build failed'
-        with open (file_fails, "r") as file_fails:
-            body = file_fails.read()
+        body = ", ".join(results)
     subject = message
     msg = text(body)
     msg['Subject'] = subject
@@ -33,4 +32,3 @@ def send_report(success,file_fails, pusher_email):
         result = False
 
     return result
-
