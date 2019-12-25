@@ -3,6 +3,7 @@
 import os
 import pymysql
 import pandas as pd
+from flask import jsonify
 from flask import Flask, request
 from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename
@@ -18,12 +19,15 @@ MYSQL_PORT	= '3306'
 
 app = Flask(__name__)
 
+def getMysqlConnection():
+    return pymysql.connect(host=MYSQL_HOST,user=MYSQL_USER,passwd=MYSQL_PW,\
+        db=MYSQL_DB,cursorclass=pymysql.cursors.DictCursor)
 
 @app.route("/", methods=['GET'])
 @app.route("/health", methods=['GET'])
 def checkalive():
     try:
-        db = pymysql.connect(host=MYSQL_HOST,user=MYSQL_USER,passwd=MYSQL_PW,db=MYSQL_DB)
+        db = getMysqlConnection()
     except Exception:
         return "Error in MySQL connexion", 500
     else:
@@ -64,6 +68,33 @@ def batch_up():
     with engine.connect() as conn, conn.begin():
         df.to_sql('containers_registered', conn, if_exists='replace')
     return "fine"
+
+
+@app.route('/session/<id>', methods=['GET'])
+def session(id):
+    db = getMysqlConnection() # CHANGE
+    
+                #   origional
+                #       getsession = "SELECT JSON_ARRAYAGG(JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto, 'truckTara', truckTara, 'Neto', neto)) from sessions where id='%s'" %id
+    getsession = "SELECT * from transactions where id={}".format(id)
+
+        #return id',truckid', 'Bruto')
+        #IF OUT  (truckTara, neto)  
+
+    cur = db.cursor()
+    cur.execute(getsession)
+    output = cur.fetchone()
+    db.close()
+    if output==None:
+        return jsonify({'message':'No session found', 'status':404})
+
+    return_json=jsonify({"id":output['id'],"truck":output['truck'],"bruto":output['bruto']})
+        #ONLY for OUT:
+    if output['direction']=="out":
+        return_json=jsonify({"id":output['id'],"truck":output['truck'],"bruto":output['bruto'],"truckTara":output['truckTara'],"neto":output['neto']})
+
+    return return_json
+
 
 
 app.run(host="0.0.0.0", port=ACCESS_PORT, debug=True)
