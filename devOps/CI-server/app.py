@@ -84,7 +84,7 @@ def webhook():
         cprint('All tests passed! sending report...', 'green', attrs=['bold'])
     else:
         cprint('Some tests failed! will not update production. sending report...', 'red', attrs=['bold'])
-    sendReport.send_report(test_passed, ["results1", "asddfsdgffsd", "sdfsdfsdf"], pusher_email, head_commit,
+    sendReport.send_report(test_passed, results, pusher_email, head_commit,
                            branch_name)
 
     # if the test passed - push to production
