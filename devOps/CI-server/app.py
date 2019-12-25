@@ -21,11 +21,11 @@ master_history_path = "/home/ubuntu/master_hist"
 
 # To do: update the pathes
 # Will success:
-# providor_run_tests_path = "/devOps/CI-server/temp/success"
-# weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
+providor_run_tests_path = "/devOps/CI-server/temp/success"
+weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
 # Will fail:
-providor_run_tests_path = "/devOps/CI-server/temp/fail"
-weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
+# providor_run_tests_path = "/devOps/CI-server/temp/fail"
+# weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
 
 # global var
 version_hash = "production is down."
@@ -84,7 +84,7 @@ def webhook():
         cprint('All tests passed! sending report...', 'green', attrs=['bold'])
     else:
         cprint('Some tests failed! will not update production. sending report...', 'red', attrs=['bold'])
-    sendReport.send_report(test_passed, ["results1", "asddfsdgffsd", "sdfsdfsdf"], pusher_email, head_commit,
+    sendReport.send_report(test_passed, results, pusher_email, head_commit,
                            branch_name)
 
     # if the test passed - push to production
@@ -120,7 +120,8 @@ def exec_tests(providor_path, weight_path):
     if state == True and state1 == True:
         return True, []
     else:
-        return False, error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+        combined_tests_list = error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+        return False, combined_tests_list
 
 
 # deleting unused images containers and volumes
