@@ -1,20 +1,13 @@
+import os
 from flask import Flask, request
-
-import sys
 import datetime
 
-import os
-
 from model import Model
-
-
 from query_helper import QueryHelper
 
 
-
-
 app = Flask(__name__)
-#model = None
+
 
 @app.route('/health', methods=["GET"])
 def check_health():
@@ -22,34 +15,31 @@ def check_health():
         return "OK", 200
     return "Internal Error", 500
 
+
 @app.route('/provider', methods=["POST"])
-def PostProvider():
-    data= request.json
-    result=model.createProvider(data["name"])
-    if result == 1 :
+def post_provider():
+    data = request.json
+    result = model.create_provider(data["name"])
+    if not result:
         return "The name is exist ,Choose another one", 404
-    return result
+    return result, 200
 
 
 @app.route('/provider/<int:id>', methods=["PUT"])
-def PutProvider(id):
-    #print("YOHO")
-    data= request.json
-    print(data["name"])
-    print(id)
-    result=model.updateProvider(id,data["name"])
-    # if result == 1 :
-    #         return "Wrong id", 404
-    # return "put ok" ,200
-    return result
+def put_provider(id):
+    data = request.json
+    result = model.update_provider(id, data["name"])
+    if not result[0]:
+        return result[1], 404
+    return result[1], 200
 
 
 @app.route('/truck/<int:id>/', methods=["GET"])
 def GetTruck(id ):    
     timeFrom=request.args["from"]
     timeTo=request.args["to"]
-    if timeFormat(timeFrom):
-        if timeFormat(timeFrom):
+    if timeFormat(timeFrom)[0]:
+        if timeFormat(timeFrom)[0]:
             print("ok")        
     print(timeFrom)
     return "OK" ,200
@@ -61,11 +51,11 @@ def timeFormat(time):
     try:
         date_obj = datetime.datetime.strptime(time, date_format)
         print(date_obj)
-        result=1
+        return True  , "Succedded"
     except ValueError:
-        print("Incorrect data format, should be YYYYMMDDHHMMSS")
-        result=0
-    return result    
+        return  False , "Incorrect data format, should be YYYYMMDDHHMMSS"
+
+
 
 # @app.route('/put/<int:id>', methods=["PUT"])
 # def Check(id):
