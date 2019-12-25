@@ -98,7 +98,7 @@ def webhook():
     clean_env()
 
     print("\n\n")
-    print(colored('DONE', 'red', attrs=['reverse', 'blink']))
+    print(colored('DONE', 'green', attrs=['reverse', 'blink']))
     return "CI server webhooked".format(content)
 
 
@@ -129,9 +129,16 @@ def clean_env():
 
 
 def build(weight_path, provider_path):
+    cprint('Building weights app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} build --no-cache".format(weight_path), shell=True)
+    print("\n\n")
+    cprint('Composing weights app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} up -d".format(weight_path), shell=True)
+    print("\n\n")
+    cprint('building providers app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} build --no-cache".format(provider_path), shell=True)
+    print("\n\n")
+    cprint('Composing providers app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} up -d".format(provider_path), shell=True)
 
 
