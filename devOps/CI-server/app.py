@@ -18,6 +18,7 @@ providor_path_test = "/awesome_provider/docker-compose.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
+
 # To do: update the pathes
 # Will success:
 # providor_run_tests_path = "/devOps/CI-server/temp/success"
@@ -118,8 +119,8 @@ def exec_tests(providor_path, weight_path):
     if state == True and state1 == True:
         return True, []
     else:
-        return False, error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
-
+        return False, error_list + error_list1 + ["%d tests failed" %len(error_list + error_list1)]
+   
 
 # deleting unused images containers and volumes
 def clean_env():
