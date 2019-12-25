@@ -20,7 +20,7 @@ class MyTestCase(unittest.TestCase):
         bill = BillHelper(None, "url")
         total_pay, truck_count, session_count, \
         products, provider_name = bill.get_data(id, f, t)
-        self.assertEqual(total_pay, 50)
+        self.assertEqual(total_pay, 60)
 
 
 if __name__ == '__main__':

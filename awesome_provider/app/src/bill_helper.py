@@ -2,9 +2,6 @@ import requests
 import json
 
 
-
-
-
 class BillHelper(object):
 
     def __init__(self, model, wight_url):
@@ -37,23 +34,25 @@ class BillHelper(object):
                     total_pay = \
                         total_pay + self.add_weight(id, products, session)
 
-        return total_pay, truck_count, session_count, products, provider_name
+        return total_pay, truck_count, \
+               session_count, products, provider_name
 
     def map_weight(self, weights_set):
         map = {}
         for w in weights_set:
-            if not map[w['id']]: map[w['id']]
-            map[w['id']] = w
+            id = w['id']
+            if not id in map.keys(): map[id] = []
+            map[id].append(w)
         return map
 
     def add_weight(self, id, products, session):
         if session['neto'] == 'na': return 0
 
-        if session['product'] not in products:
+        if session['produce'] not in products:
             rate = self.get_rate(id, session)
             to_add = self.create_product(rate, session)
-            products[session['product'], to_add]
-        p = products['product']
+            products[session['produce']] = to_add
+        p = products[session['produce']]
         p['count'] = p['count'] + 1
         p['total_kg'] = p['total_kg'] + session['neto']
         add_to_total = p['rate'] * session['neto']
@@ -61,12 +60,12 @@ class BillHelper(object):
         return add_to_total
 
     def create_product(self, rate, session):
-        to_add = {'name': session['product'], 'count': 0,
+        to_add = {'name': session['produce'], 'count': 0,
                   'rate': rate, 'total_kg': 0, 'pay': 0}
         return to_add
 
     def get_rate(self, id, session):
-        #return self.model \
+        # return self.model \
         #    .get_rate(session['product'], id)
 
         ##  returns mock ##
@@ -75,53 +74,60 @@ class BillHelper(object):
         if session['produce'] == "banana": return 2
 
     def get_weights(self, from_t, to_t):
-        #issue: pass as parameters ?from_t=<int>&to_t=<int>&f="out"
-        #response = requests.get(self.weight_url, from_t, to_t, "out")
-        #return json.loads("response")
+        # issue: pass as parameters ?from_t=<int>&to_t=<int>&f="out"
+        # response = requests.get(self.weight_url, from_t, to_t, "out")
+        # return json.loads("response")
 
         ##  returns mock ##
 
         return [{"id": 1,
-          "direction": "out",
-          "bruto": 0,
-          "neto": "na",
-          "produce": "appal",
-          "containers": []},
-         {"id": 2,
-          "direction": "out",
-          "bruto": 0,
-          "neto": 10,
-          "produce": "appal",
-          "containers": []},
-         {"id": 3,
-          "direction": "out",
-          "bruto": 0,
-          "neto": 20,
-          "produce": "appal",
-          "containers": []},
-         {"id": 4,
-          "direction": "out",
-          "bruto": 0,
-          "neto": 10,
-          "produce": "banana",
-          "containers": []},
-         {"id": 5,
-          "direction": "in",
-          "bruto": 0,
-          "neto": 10,
-          "produce": "banana",
-          "containers": []},
-         {"id": 6,
-          "direction": "in",
-          "bruto": 0,
-          "neto": 10,
-          "produce": "banana",
-          "containers": []}
-         ]
+                 "direction": "out",
+                 "bruto": 0,
+                 "neto": "na",
+                 "produce": "appal",
+                 "containers": []},
+                {"id": 2,
+                 "direction": "out",
+                 "bruto": 0,
+                 "neto": 10,
+                 "produce": "appal",
+                 "containers": []},
+                {"id": 1,
+                 "direction": "out",
+                 "bruto": 0,
+                 "neto": 10,
+                 "produce": "appal",
+                 "containers": []},
+                {"id": 3,
+                 "direction": "out",
+                 "bruto": 0,
+                 "neto": 20,
+                 "produce": "appal",
+                 "containers": []},
+                {"id": 4,
+                 "direction": "out",
+                 "bruto": 0,
+                 "neto": 10,
+                 "produce": "banana",
+                 "containers": []},
+                {"id": 5,
+                 "direction": "in",
+                 "bruto": 0,
+                 "neto": 10,
+                 "produce": "banana",
+                 "containers": []},
+                {"id": 6,
+                 "direction": "in",
+                 "bruto": 0,
+                 "neto": 10,
+                 "produce": "banana",
+                 "containers": []}
+                ]
 
     def get_provider_name(self, id):
         # return self.model.get_provider_by_id(id)
         return "prov name"
+
     def get_truck(self, id):
-        #return self.model.get_trucks(id)
-        return {1,2,3,4,5}
+        # return self.model.get_trucks(id)
+        return {1, 2, 3, 4}
