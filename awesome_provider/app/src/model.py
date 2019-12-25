@@ -1,3 +1,6 @@
+import json
+import requests
+
 
 class Model(object):
     def __init__(self, query_helper):
@@ -8,3 +11,11 @@ class Model(object):
         if int(data[0][0]) == 1:
             return True
         return False
+
+    #return trucks {} hash_set by provider id
+    def get_trucks(self, id):
+        return {}
+    #return int product rate by provider id
+    def get_rate(self, products, id):
+        return 0
+
