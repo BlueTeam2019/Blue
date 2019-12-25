@@ -81,4 +81,4 @@ if __name__ == '__main__':
     query_helper = QueryHelper(db_url, db_user, db_pass, db_name, db_port)
     model = Model(query_helper)
 
-    app.run(host='0.0.0.0', debug=bool(do_debug))  
+    app.run(host='0.0.0.0', debug=bool(do_debug))
