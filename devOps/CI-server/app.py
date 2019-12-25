@@ -5,6 +5,7 @@ from flask import Flask, request
 from git import Repo
 import shutil
 import sendReport
+from termcolor import colored, cprint
 
 # Standard Flask app
 app = Flask(__name__)
@@ -22,6 +23,7 @@ master_history_path = "/home/ubuntu/master_hist"
 version_hash = "production is down."
 test_version_hash = "testing is down"
 
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -31,6 +33,7 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
 
 # Standard Flask endpoint
 @app.route("/", )
@@ -43,8 +46,10 @@ def hello_world():
 # webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
-
     print(f"{bcolors.WARNING}Warning: No active frommets remain. Continue?{bcolors.ENDC}")
+    text = colored('Hello, World!', 'red', attrs=['reverse', 'blink'])
+    print(text)
+    cprint('Hello, World!', 'green', 'on_red')
     global version_hash
     global test_version_hash
     # trying to free up space
