@@ -20,11 +20,11 @@ providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
 #To do: update the pathes
 #Will success:
-providor_run_tests_path = "/devOps/CI-server/temp/success"
-weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
+#providor_run_tests_path = "/devOps/CI-server/temp/success"
+#weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
 #Will fail:
-#providor_run_tests_path = "/devOps/CI-server/temp/fail"
-#weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
+providor_run_tests_path = "/devOps/CI-server/temp/fail"
+weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
 
 
 # global var
