@@ -55,10 +55,11 @@ def rates_post():
         if not file or not file.filename:
             return '400: No file specified.\nMake sure you send the file under `file` key, e.g., `file: file-name`.'
         resp = model.post_rates_to_db(file)
-        if resp:
-            return f'200: OK\nNumber of records updated : {resp}'
-        return '500: Server Error'
+        if resp == -1:
+            return '500: Server Error'
 
+        return f'200: OK\nNumber of records updated : {resp}'
+        
     return send_file("../in/rates.xlsx", as_attachment=True)
 
     # return '''<!doctype html>
