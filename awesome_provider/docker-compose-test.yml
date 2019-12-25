@@ -2,22 +2,22 @@ version: '3'
 
 services:
 
-    testapi:
-        container_name: testapi
+    billing_api_test:
+        container_name: billing_api_test
         build:
             context: ./app
             dockerfile: Dockerfile.test
         networks:
             - backend
         environment:
-            - DB_URL=sql
+            - DB_URL=billing_sql_test
             - DB_PASS=pass
             - DB_NAME=billdb
             - DB_PORT=3306
             - DB_USR=root
             
-    sqltest:
-        container_name: sqltest
+    billing_sql_test:
+        container_name: billing_sql_test
         build: ./db_scripts
         ports: 
             - "3408:3306"
