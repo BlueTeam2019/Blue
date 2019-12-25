@@ -1,7 +1,12 @@
 virt
 __pycache__
-/container_data
+container_data/*
 .idea
 .venv
 *.pyc
+
 container_data
+
+# keep this
+!container_data/.gitkeep
+

@@ -1,6 +1,5 @@
 import requests
 from model_handlers import generate_query_from_excel
-
 import json
 
 
@@ -39,6 +38,56 @@ class Model(object):
             return "ID is not exist"
         return table
 
+    def update_truck_provider(self, request, new_provider):
+        is_updated = False
+        if request.get('id') and request.get('provider') and new_provider:
+            truck_id = request['id']
+            old_provider = int(request['provider'])
+            new_provider = int(new_provider)
+            if self.check_if_provider_exist(old_provider) and self.check_if_provider_exist(new_provider):
+                is_updated = self.update_provider_for_truck(truck_id,new_provider)
+
+        return is_updated
+
+    def check_if_provider_exist(self, provider_id):
+        provider_exist = False
+        check_provider_query = f"SELECT COUNT(*) FROM Provider WHERE id={provider_id}"
+        provider_count = self.query.get_data(check_provider_query)
+        if provider_count:
+            if provider_count[0][0] == "1":
+                provider_exist = True
+
+        return provider_exist
+
+    def update_provider_for_truck(self, truck_id, new_provider_id):
+        is_updated = False
+        update_truck_query = f"UPDATE Trucks SET provider_id = {new_provider_id} WHERE id = '{truck_id}'"
+        affected_rows = self.query.alter_data(update_truck_query)
+        if affected_rows == "1":
+            is_updated = True
+        return is_updated
+
+    def insert_truck(self, provider_id, truck_id):
+        is_registered = False
+        add_truck_query = f"INSERT IGNORE INTO Trucks(id,provider_id) VALUES ('{truck_id}',{provider_id})"
+        affected_rows = self.query.alter_data(add_truck_query)
+        if affected_rows == "1":
+            is_registered = True
+
+        return  is_registered
+
+    def register_truck(self, request):
+        # Register truck:
+        # if truck exist wont register
+        # for error / no affected rows return False
+        is_registered = False
+        if request.get('id') and request.get('provider'):
+            truck_id = request['id']
+            provider = int(request['provider'])
+            if self.check_if_provider_exist(provider):
+                is_registered = self.insert_truck(provider, truck_id)
+
+        return is_registered
 
     def is_column_in_provider_exist(self, column, name):
         is_exist = self.query.get_data(f"select Count(*) from Provider where {column}='{name}';")

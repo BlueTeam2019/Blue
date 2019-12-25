@@ -1,3 +1,5 @@
+import os
+
 import pandas
 
 
@@ -17,7 +19,8 @@ def generate_query_from_excel(file):
         query_values.append(f"('{row[product]}','{row[rate]}','{row[scope]}')")
 
     # Save and overwrite the new excel file
-    data.to_excel('../in/rates.xlsx', "rates", index=False)
+    path = '~/app/in/rates.xlsx' if os.environ.get("DEBUG", False) else '/app/in/rates.xlsx'
+    data.to_excel(path, "rates", index=False)
 
     # Return properly formatted query
     return ',\n'.join(query_values) + ';'
