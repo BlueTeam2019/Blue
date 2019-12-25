@@ -1,2 +1,2 @@
 def runTesting():
-	return False, ["error7", "error8", "error9", "error10", "error11"]
+	return False, ["test_build_providor", "test_providor_routing", "test_setUp_providor", "test_get_health_200"]
