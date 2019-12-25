@@ -6,8 +6,7 @@ services:
         dockerfile: Dockerfile
     ports:
      - "8087:5000"
-    #volumes:
-    # - .:/app
+
 
 
 
@@ -25,10 +24,10 @@ services:
         - "3301:3306" 
     
     volumes:
-      -  ./DATA:/var/lib/mysql
+      -  DATAT:/var/lib/mysql
 
 volumes:
-    DATA:
+    DATAT:
 
 
 
