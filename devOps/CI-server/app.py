@@ -120,7 +120,11 @@ def exec_tests(providor_path, weight_path):
     if state == True and state1 == True:
         return True, []
     else:
-        return False, error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+        combined_tests_list = error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+        print("\n\n")
+        print(combined_tests_list)
+        print("\n\n")
+        return False, combined_tests_list
 
 
 # deleting unused images containers and volumes
