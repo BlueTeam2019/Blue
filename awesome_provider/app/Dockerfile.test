@@ -1,8 +1,10 @@
 FROM python:3
 
 WORKDIR /app
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
 COPY . /app
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
+RUN chmod 777 /app/in
 
-CMD  python3 -m unittest discover -s tests -p 'test_*.py'
+#CMD  python3 -m unittest discover -s tests -p 'test_*.py'
+CMD  python3 src/routing.py
