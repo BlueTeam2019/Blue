@@ -1,6 +1,5 @@
 from model_handlers import generate_query_from_excel
 
-
 import json
 
 
@@ -13,7 +12,29 @@ class Model(object):
         if int(data[0][0]) == 1:
             return True
         return False
-    
+
+    def get_list_trucks_by_id(self ,provider_id):
+        table=self.query.get_data(f"select id from Provider where provider_id='{provider_id}';")
+        #return '' if the id is not exist and else:table
+        result=''
+        if not table:
+            return "ID is not exist"
+        for item in table:
+            result =
+
+        return result
+
+
+    def get_provider_by_id(self ,provider_id):
+        table=self.query.get_data(f"select * from Provider where id='{provider_id}';")
+        #return '' if the id is not exist and else:table
+        if not table:
+            return "ID is not exist"
+        return json.dumps({'id': table[0][0], 'name': table[0][1]})
+
+
+
+
     def is_column_in_provider_exist(self, column, name):
         is_exist = self.query.get_data(f"select Count(*) from Provider where {column}='{name}';")
         is_exist = is_exist[0][0]
@@ -59,7 +80,8 @@ class Model(object):
         # First remove all records from the table
         self.query.alter_data(f'''DELETE FROM {table_name};''')
         # Insert new values into the table
-        db_records = self.query.alter_data(f'''INSERT INTO {table_name}(product_id, rate, scope) VALUES {file_query};''')
+        db_records = self.query.alter_data(
+            f'''INSERT INTO {table_name}(product_id, rate, scope) VALUES {file_query};''')
 
         return int(db_records)
 
