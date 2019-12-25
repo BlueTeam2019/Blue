@@ -19,8 +19,13 @@ weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
 #To do: update the pathes
-providor_run_tests_path = "/devOps/CI-server/temp"
-weight_run_tests_path = "/devOps/CI-server/temp/tempTest"
+#Will success:
+providor_run_tests_path = "/devOps/CI-server/temp/success"
+weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
+#Will fail:
+#providor_run_tests_path = "/devOps/CI-server/temp/fail"
+#weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
+
 
 # global var
 version_hash = "production is down."
