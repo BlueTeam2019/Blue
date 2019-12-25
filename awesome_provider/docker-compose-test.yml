@@ -2,35 +2,40 @@ version: '3'
 
 services:
 
-    tests:
+    testapi:
         container_name: testapi
-        build: ./app
-        dockerfile: Dockerfile.test
+        build:
+            context: ./app
+            dockerfile: Dockerfile.test
         networks:
             - backend
         environment:
-            - 'DB_URL=sql'
-            - 'DB_PASS=pass'
-            - 'DB_NAME=billdb'
-            - 'DB_PORT=3408'
+            - DB_URL=sql
+            - DB_PASS=pass
+            - DB_NAME=billdb
+            - DB_PORT=3306
+            - DB_USR=root
             
-    sql:
-        container_name: mysql
+    sqltest:
+        container_name: sqltest
         build: ./db_scripts
         ports: 
             - "3408:3306"
         networks: 
             - backend
-        volumes: 
-            - 'container_data:/docker-entrypoint-initdb.d'        
+        volumes:
+            - dbtest:/docker-entrypoint-initdb.d
+            - ./app/intest:/root/app/in
+            - container_data_test:/docker-entrypoint-initdb.d
         environment: 
             - MYSQL_ROOT_PASSWORD=pass
-            - MYSQL_USER=root
             - MYSQL_PASSWORD=pass            
             - MYSQL_DATABASE=billdb
 networks:
     backend:
 volumes: 
-    container_data:
+    container_data_test:
+    dbtest:
+    intest:
     
         
