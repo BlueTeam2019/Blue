@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    sql:
+        container_name: mysql
+        build: ./db_scripts
+        ports:
+            - "33060:3306"
+        networks:
+            - backend
+        environment:
+            - MYSQL_ROOT_PASSWORD=pass
+            - MYSQL_PASSWORD=pass
+            - MYSQL_DATABASE=billdb
+networks:
+    backend:
