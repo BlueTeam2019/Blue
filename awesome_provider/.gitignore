@@ -3,3 +3,4 @@ __pycache__
 /container_data
 .idea
 .venv
+*.pyc
