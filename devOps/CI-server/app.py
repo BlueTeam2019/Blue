@@ -18,6 +18,7 @@ providor_path_test = "/awesome_provider/docker-compose.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
+
 # To do: update the pathes
 # Will success:
 # providor_run_tests_path = "/devOps/CI-server/temp/success"
@@ -65,7 +66,7 @@ def webhook():
 
     # creating a local repository for testing
     print("\n\n")
-    cprint('Cloning repository...', 'red', 'on_white', attrs=['bold'])
+    cprint('Cloning repository for {0}...'.format(head_commit), 'red', 'on_white', attrs=['bold'])
     repo = repo_dir + head_commit
     create_repo_of_commit(git_url, repo, head_commit)
 
@@ -76,16 +77,30 @@ def webhook():
     test_version_hash = "Test server: " + branch_name + " - " + head_commit
 
     # testing build and sending reports
+    print("\n\n")
+    cprint('Executing tests...', 'red', 'on_white', attrs=['bold'])
     test_passed, results = exec_tests(repo + providor_run_tests_path, repo + weight_run_tests_path)
-    sendReport.send_report(test_passed, results, pusher_email)
+    if test_passed:
+        cprint('All tests passed! sending report...', 'green', attrs=['bold'])
+    else:
+        cprint('Some tests failed! will not update production. sending report...', 'red', attrs=['bold'])
+    sendReport.send_report(test_passed, ["results1", "asddfsdgffsd", "sdfsdfsdf"], pusher_email, head_commit,
+                           branch_name)
 
     # if the test passed - push to production
     if branch_name == "master" and test_passed:
+        print("\n\n")
+        cprint('Updating production...', 'red', 'on_white', attrs=['bold'])
         build(repo + weight_path_prod, repo + providor_path_prod)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
         version_hash = "Production server: " + branch_name + " - " + head_commit
 
+    print("\n\n")
+    cprint('Cleaning up environment...', 'red', 'on_white', attrs=['bold'])
     clean_env()
+
+    print("\n\n")
+    print(colored('DONE', 'green', attrs=['reverse', 'blink']))
     return "CI server webhooked".format(content)
 
 
@@ -116,9 +131,16 @@ def clean_env():
 
 
 def build(weight_path, provider_path):
+    cprint('Building weights app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} build --no-cache".format(weight_path), shell=True)
+    print("\n\n")
+    cprint('Composing weights app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} up -d".format(weight_path), shell=True)
+    print("\n\n")
+    cprint('building providers app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} build --no-cache".format(provider_path), shell=True)
+    print("\n\n")
+    cprint('Composing providers app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} up -d".format(provider_path), shell=True)
 
 

@@ -2,7 +2,7 @@ from flask import Flask, request
 import os, sys, smtplib
 from email.mime.text import MIMEText as text
 
-def send_report(success,results, pusher_email):
+def send_report(success,results, pusher_email, commit_hash, branch_name):
     result = True
     gmail_user = 'ci.server.blue@gmail.com'
     gmail_password = 'ci.server.blue123'
@@ -13,7 +13,8 @@ def send_report(success,results, pusher_email):
     body = message
     if not success:
         message = 'Build failed'
-        body = ", ".join(results)
+        str = "Build faild. \ncommit hash: %s \nbranch name: %s \n" %(commit_hash, branch_name) 
+        body = str + ", ".join(results)
     subject = message
     msg = text(body)
     msg['Subject'] = subject
