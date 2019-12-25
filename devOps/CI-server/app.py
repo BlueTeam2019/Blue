@@ -4,7 +4,7 @@ import yaml
 from flask import Flask, request
 from git import Repo
 import shutil
-import sendReport 
+import sendReport
 
 # Standard Flask app
 app = Flask(__name__)
@@ -47,7 +47,7 @@ def webhook():
 
     # testing build and sending reports
     test_passed, results = exec_tests()
-    sendReport.send_report(test_passed, results, pusher_email) 
+    sendReport.send_report(test_passed, results, pusher_email)
 
     # if the test passed - push to production
     if branch_name == "master" and test_passed:
@@ -65,7 +65,7 @@ def create_repo_of_commit(git_url, repo_dir, commit_hash):
 
 # implement
 def exec_tests():
-    return True, "Test 1: pass\nTest 2: pass"
+    return True, ["Test 1: pass", "Test 2: pass"]
 
 
 # deleting unused images containers and volumes
