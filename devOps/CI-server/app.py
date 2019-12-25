@@ -46,13 +46,11 @@ def hello_world():
 # webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    print(f"{bcolors.WARNING}Warning: No active frommets remain. Continue?{bcolors.ENDC}")
-    text = colored('Hello, World!', 'red', attrs=['reverse', 'blink'])
-    print(text)
-    cprint('Hello, World!', 'green', 'on_red')
+    print(colored('Incoming push!!!', 'red', attrs=['reverse', 'blink']))
     global version_hash
     global test_version_hash
     # trying to free up space
+    cprint('Freeing up space...', 'red', 'on_white', attrs=['bold'])
     clean_env()
 
     # parsing post request
