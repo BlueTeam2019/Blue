@@ -27,12 +27,14 @@ def register_truck():
     else:
         return "Invalid Request", 400
 
-@app.route('/truck/{id}', methods=["PUT"])
-def update_truck_provider():
+@app.route('/truck/<id>', methods=["PUT"])
+def update_truck_provider(id):
+    print(id)
     is_successful = False
     try:
         data = request.get_json()
-        is_successful = provider_model.provider_model.update_truck(data,new_provider)
+        print(data)
+        is_successful = provider_model.provider_model.update_truck_provider(data,id)
     except:
         print("Error")
 

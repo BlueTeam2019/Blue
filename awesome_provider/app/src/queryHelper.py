@@ -9,21 +9,21 @@ class QueryHelper():
     #    self.port               
 
     def GetConnection():
-        return pymysql.connect(host="0.0.0.0",    # your host, usually localhost
+        return pymysql.connect(host="mysql",    # your host, usually localhost
                         user="root",                # your username
                         passwd="pass",            # your password
                         db="mysql",                 # name of the data base
-                        port=33060)                  # port of the data base
+                        port=3306)                  # port of the data base
 
     def AlterData(query):
         returnValue = ""
         if query != "":
             try:
-                db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
+                db = pymysql.connect(host="mysql",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="billdb",               # name of the data base
-                            port=33060)                # port of the data base
+                            port=3306)                # port of the data base
                 if db:
                     print("DB ALIVE")
                 cur = db.cursor()
@@ -44,11 +44,11 @@ class QueryHelper():
         returnValue = ""
         if query != "":
              try:
-                db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
+                db = pymysql.connect(host="mysql",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="billdb",               # name of the data base
-                            port=33060)                # port of the data base
+                            port=3306)                # port of the data base
                 
                 cur = db.cursor()            
                 cur.execute(query)                                
@@ -65,11 +65,11 @@ class QueryHelper():
     def selectOne():
         value = 0
         try:            
-            db = pymysql.connect(host="0.0.0.0",    # your host, usually localhost
+            db = pymysql.connect(host="mysql",    # your host, usually localhost
                             user="root",              # your username
                             passwd="pass",          # your password
                             db="mysql",               # name of the data base
-                            port=33060)                # port of the data base
+                            port=3306)                # port of the data base
             print("After connect")
             cur = db.cursor()            
             cur.execute(""" select 1  """)            

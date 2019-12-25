@@ -15,13 +15,24 @@ class provider_model:
             print("DB ERROR")
         return isAlive
 
-    def update_truck_provider(truck_id, new_provier_id):
+    def update_truck_provider(request,new_provider):
         is_updated = False
-        query = "UPDATE Trucks SET provider_id = {} WHERE truck_id = '{}'".format(provider_id,truck_id)
+        if request['id'] and request['provider'] and new_provider:
+            truck_id = request['id']
+            old_provider = int(request['provider'])
+            new_provider = int(new_provider)
+            if provider_model.check_if_provider_exist(old_provider) and provider_model.check_if_provider_exist(new_provider):
+                is_updated = provider_model.update_provider(truck_id,new_provider)
+        return is_updated
+
+    def update_provider(truck_id, new_provier_id):
+        is_updated = False
+        query = "UPDATE Trucks SET provider_id = {} WHERE id = '{}'".format(new_provier_id,truck_id)
         affected_rows = queryHelper.QueryHelper.AlterData(query)
         if affected_rows == "1":
             is_updated = True
         return is_updated
+
     def check_if_provider_exist(provider_id):
         provider_exist = False
         query = "SELECT COUNT(*) FROM Provider WHERE id={}".format(provider_id)
