@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-    api:
+    billingapi:
         container_name: billingapi
         build: ./app
         ports: 
@@ -15,7 +15,7 @@ services:
             - DB_NAME=billdb
             - DB_PORT=3306
 
-    sql:
+    mysql:
         container_name: mysql
         build: ./db_scripts
         ports: 

@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-    sql:
+    mysql:
         container_name: mysql
         build: ./db_scripts
         ports:
