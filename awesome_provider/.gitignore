@@ -1,4 +1,7 @@
 virt
 __pycache__
 /container_data
-.idea/
+.idea
+.venv
+*.pyc
+container_data

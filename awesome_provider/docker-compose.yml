@@ -15,8 +15,8 @@ services:
             - 'DB_NAME=billdb'
             - 'DB_PORT=33060'
             - 'DEBUG=FALSE'
-            
-            
+            - 'WEIGHT_URL=???       TODO'
+
     sql:
         container_name: mysql
         build: ./db_scripts

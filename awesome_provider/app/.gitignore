@@ -1,3 +1,4 @@
 virt
 .idea
+*.pyc
 /scatch.txt

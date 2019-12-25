@@ -27,9 +27,9 @@ class BillHelper(object):
         session_count = 0
 
         for t in trucks:
-            if t in weights_dict:
+            if t[0] in weights_dict:
                 truck_count += 1
-                for session in weights_dict[t]:
+                for session in weights_dict[t[0]]:
                     session_count += 1
                     total_pay = \
                         total_pay + self.add_weight(id, products, session)
@@ -125,9 +125,9 @@ class BillHelper(object):
                 ]
 
     def get_provider_name(self, id):
-        # return self.model.get_provider_by_id(id)
-        return "prov name"
+        return self.model.get_provider_by_id(id)
+        #return "prov name"
 
     def get_truck(self, id):
-        # return self.model.get_trucks(id)
-        return {1, 2, 3, 4}
+        return self.model.get_trucks(id)
+        #return {1, 2, 3, 4}

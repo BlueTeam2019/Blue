@@ -62,4 +62,5 @@ class QueryHelper(object):
         return return_value
 
     def select_one(self):
+
         return self.get_data(""" select 1  """)
