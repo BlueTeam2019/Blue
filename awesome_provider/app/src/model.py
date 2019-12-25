@@ -33,8 +33,8 @@ class Model(object):
 
     # return trucks {} hash_set by provider id
     def get_trucks(self, id):
-        table=self.query.get_data(f"select id from Provider "
-                                  f"where provider_id='{id}';")
+        table = self.query.get_data(f"select id from Trucks "
+                                    f"where provider_id='{id}';")
         if not table:
             return "ID is not exist"
         return table

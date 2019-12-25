@@ -19,12 +19,8 @@ def check_health():
 def get_bill(id):
     time_from = request.args["from"]
     time_to = request.args["to"]
-    valid_time_from_format = validate_time_format(time_from)
-    valid_time_to_format = validate_time_format(time_to)
-    if not valid_time_from_format[0]:
-        return f"from: {valid_time_from_format[1]}", 404
-    if not valid_time_to_format[0]:
-        return f"To:{valid_time_to_format[1]}", 404
+    validate_time_format(time_from)
+    validate_time_format(time_to)
     total_pay, truck_count, session_count, products, provider_name \
         = bill_helper.get_data(id, time_from, time_to)
     return bill_helper.get_json(id, time_from, time_to,
@@ -54,13 +50,8 @@ def put_provider(id):
 def get_truck(id):
     time_from = request.args["from"]
     time_to = request.args["to"]
-    valid_time_from_format = validate_time_format(time_from)
-    valid_time_to_format = validate_time_format(time_to)
-    if not valid_time_from_format[0]:
-        return f"from: {valid_time_from_format[1]}", 404
-    if not valid_time_to_format[0]:
-        return f"To:{valid_time_to_format[1]}", 404
-
+    validate_time_format(time_from)
+    validate_time_format(time_to)
     # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
     print("ok")
     return "ok", 200

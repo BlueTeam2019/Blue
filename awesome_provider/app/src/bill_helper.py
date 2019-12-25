@@ -28,9 +28,9 @@ class BillHelper(object):
         session_count = 0
 
         for row in trucks_table:
-            if row[0] in weights_dict:
+            if int(row[0]) in weights_dict:
                 truck_count += 1
-                for session in weights_dict[row[0]]:
+                for session in weights_dict[int(row[0])]:
                     session_count += 1
                     total_pay = \
                         total_pay + self.add_weight(id, products,
@@ -69,9 +69,9 @@ class BillHelper(object):
         table = self.model_.get_rates(id)
         rates = {}
         for row in table:
-            if row[3] == id:
-                rates[row[0]] = row[1]
-            elif not rates[row[0]] and row[3] == "ALL":
+            if row[2] == "ALL" and \
+                    row[0] not in rates or \
+                    int(row[2]) == id:
                 rates[row[0]] = row[1]
         return rates
 
@@ -85,7 +85,7 @@ class BillHelper(object):
         # issue: pass as parameters ?from_t=<int>&to_t=<int>&f="out"
         # response = requests.get(self.weight_url, from_t, to_t, "out")
         # return json.loads("response")
-        #return self.model_.get_weights(from_t, to_t)
+        # return self.model_.get_weights(from_t, to_t)
         ##  returns mock ##
 
         return [{"id": 1,

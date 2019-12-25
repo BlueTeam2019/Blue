@@ -2,6 +2,7 @@ import unittest
 from unittest import mock
 
 from bill_helper import BillHelper
+from model_builder import ModelBuilder
 
 
 class MyTestCase(unittest.TestCase):
@@ -17,7 +18,8 @@ class MyTestCase(unittest.TestCase):
         id = 23
         f = 0
         t = 1
-        bill = BillHelper(None, "url")
+
+        bill = BillHelper(ModelBuilder().build(), "url")
         total_pay, truck_count, session_count, \
         products, provider_name = bill.get_data(id, f, t)
         self.assertEqual(total_pay, 60)

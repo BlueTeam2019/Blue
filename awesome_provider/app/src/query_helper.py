@@ -37,8 +37,8 @@ class QueryHelper(object):
         return return_value
 
     def get_data(self, query):
-        return_value = ""
         db = None
+        return_value = ""
         if query:
             try:
                 db = pymysql.connect(host=self.url,  # your host, usually localhost
@@ -51,7 +51,7 @@ class QueryHelper(object):
                 cur.execute(query)
                 data = cur.fetchall()
                 return_value = data
-            except pymysql.err as e:
+            except Exception as e:
                 print(f"Error in function: GetmysqlData() please check\n{e}")
                 raise
 
