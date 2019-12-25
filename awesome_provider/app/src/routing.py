@@ -32,22 +32,6 @@ def put_provider(id):
     return result[1], 200
 
 
-@app.route('/truck/<int:id>/', methods=["GET"])
-def get_truck(id):
-    time_from = request.args["from"]
-    time_to = request.args["to"]
-    valid_time_from_format = validate_time_format(time_from)
-    valid_time_to_format = validate_time_format(time_to)
-    if not valid_time_from_format[0]:
-        return f"from: {valid_time_from_format[1]}", 404
-    if not valid_time_to_format[0]:
-        return f"To:{valid_time_to_format[1]}", 404
-
-    # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
-    print("ok")
-    return "ok", 200
-
-
 @app.route('/rates', methods=['GET', 'POST'])
 def rates_post():
     if request.method == 'POST':
@@ -69,6 +53,48 @@ def rates_post():
     # <p><input type=file name=file><input type=submit value=Upload>
     # </form>
     # '''
+
+
+@app.route('/truck', methods=["POST"])
+def register_truck():
+    try:
+        data = request.get_json()
+        if model.register_truck(data):
+            return "OK",200
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+    return "Invalid Request", 400
+
+
+@app.route('/truck/<id>', methods=["PUT"])
+def update_truck_provider(id):
+    try:
+        data = request.get_json()
+        if model.update_truck_provider(data, id):
+            return "OK",200
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+    return "Invalid Request", 400
+
+
+@app.route('/truck/<int:id>/', methods=["GET"])
+def get_truck(id):
+    time_from = request.args["from"]
+    time_to = request.args["to"]
+    valid_time_from_format = validate_time_format(time_from)
+    valid_time_to_format = validate_time_format(time_to)
+    if not valid_time_from_format[0]:
+        return f"from: {valid_time_from_format[1]}", 404
+    if not valid_time_to_format[0]:
+        return f"To:{valid_time_to_format[1]}", 404
+
+    # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
+    print("ok")
+    return "ok", 200
 
 
 if __name__ == '__main__':
