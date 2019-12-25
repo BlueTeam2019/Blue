@@ -20,21 +20,24 @@ def check_health():
 def get_bill(id):
     time_from = request.args["from"]
     time_to = request.args["to"]
-    validate_time_format(time_from)
-    validate_time_format(time_to)
+    if not validate_time_format(time_from):
+        return "Can not read start time", 401
+    if not validate_time_format(time_to):
+        return "Can not read end time", 401
+
     total_pay, truck_count, session_count, products, provider_name \
-        = bill_helper.get_data(id, time_from, time_to)
+    = bill_helper.get_data(id, time_from, time_to)
     return bill_helper.get_json(id, time_from, time_to,
-                                total_pay, truck_count,
-                                session_count, products,
-                                provider_name)
+                            total_pay, truck_count,
+                            session_count, products,
+                            provider_name)
 
 @app.route('/provider', methods=["POST"])
 def post_provider():
     data = request.json
     result = model.create_provider(data["name"])
     if not result:
-        return "The name is exist ,Choose another one", 404
+        return "The name already exist, Choose another one", 401
     return result, 200
 
 
@@ -52,8 +55,10 @@ def put_provider(id):
 def get_truck(id):
     time_from = request.args["from"]
     time_to = request.args["to"]
-    validate_time_format(time_from)
-    validate_time_format(time_to)
+    if not validate_time_format(time_from):
+        return "Can not read start time", 401
+    if not validate_time_format(time_to):
+        return "Can not read end time", 401
     # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
     print("ok")
     return "ok", 200

@@ -5,8 +5,6 @@ container_data/*
 .venv
 *.pyc
 
-container_data
-
 # keep this
 !container_data/.gitkeep
 
