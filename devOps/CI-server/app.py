@@ -65,10 +65,14 @@ def webhook():
     clean_env()
 
     # creating a local repository for testing
+    print("\n\n")
+    cprint('Cloning repository...', 'red', 'on_white', attrs=['bold'])
     repo = repo_dir + head_commit
     create_repo_of_commit(git_url, repo, head_commit)
 
     # building testing build
+    print("\n\n")
+    cprint('Building testing environment...', 'red', 'on_white', attrs=['bold'])
     build(repo + weight_path_test, repo + providor_path_test)
     test_version_hash = "Test server: " + branch_name + " - " + head_commit
 
