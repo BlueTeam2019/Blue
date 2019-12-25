@@ -27,7 +27,7 @@ class QueryHelper(object):
                 db.commit()
                 print(f"Rows Changed:{return_value}")
 
-            except pymysql.err as e:
+            except Exception as e:
                 return_value = "-1"
                 print(f"Error in function: GetmysqlData() please check.\n{e}")
             finally:
@@ -51,9 +51,8 @@ class QueryHelper(object):
                 cur.execute(query)
                 data = cur.fetchall()
                 return_value = data
-            except pymysql.err as e:
+            except Exception as e:
                 print(f"Error in function: GetmysqlData() please check\n{e}")
-                raise
 
             finally:
                 if db:

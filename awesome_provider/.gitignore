@@ -1,6 +1,6 @@
 virt
 __pycache__
-/container_data
+/container_data/*.*
 .idea
 .venv
 *.pyc
