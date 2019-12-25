@@ -18,6 +18,14 @@ providor_path_test = "/awesome_provider/docker-compose.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
+#To do: update the pathes
+#Will success:
+#providor_run_tests_path = "/devOps/CI-server/temp/success"
+#weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
+#Will fail:
+providor_run_tests_path = "/devOps/CI-server/temp/fail"
+weight_run_tests_path = "/devOps/CI-server/temp/fail/tempTest"
+
 
 # global var
 version_hash = "production is down."
@@ -77,7 +85,7 @@ def webhook():
     test_version_hash = "Test server: " + branch_name + " - " + head_commit
 
     # testing build and sending reports
-    test_passed, results = exec_tests()
+    test_passed, results = exec_tests(providor_run_tests_path, weight_run_tests_path)
     sendReport.send_report(test_passed, results, pusher_email)
 
     # if the test passed - push to production
@@ -95,10 +103,19 @@ def create_repo_of_commit(git_url, repo_dir, commit_hash):
     repo.git.checkout(commit_hash)
 
 
-# implement
-def exec_tests():
-    return True, ["Test 1: pass", "Test 2: pass"]
-
+def exec_tests(providor_path, weight_path):
+    import sys
+    sys.path.insert(1, providor_path)
+    from testExecProvidor import runTesting
+    sys.path.insert(1, weight_path)
+    from testExecWeight import execTesting
+    state, error_list = runTesting() 
+    state1, error_list1 = execTesting()
+    if state == True and state1 == True:
+        return True, []
+    else:
+        return False, error_list + error_list1 + ["%d tests failed" %len(error_list + error_list1)]
+    
 
 # deleting unused images containers and volumes
 def clean_env():
