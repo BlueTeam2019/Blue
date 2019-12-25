@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import os
-import pymysql
 import pandas as pd
 from flask import Flask, request
+import pymysql
 from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename
 
@@ -34,9 +34,7 @@ def checkalive():
         except Exception:
             return "Error with query: " + query, 500
         else:
-            db.commit()
             result = cur.fetchall()
-            print(result)
         db.close() 
     return "HOME is where ♥Heart is❤❤❤", 200
 
@@ -64,6 +62,7 @@ def batch_up():
     with engine.connect() as conn, conn.begin():
         df.to_sql('containers_registered', conn, if_exists='replace')
     return "fine"
+
 
 
 app.run(host="0.0.0.0", port=ACCESS_PORT, debug=True)
