@@ -10,6 +10,10 @@ from termcolor import colored, cprint
 # Standard Flask app
 app = Flask(__name__)
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 # Configuration
 git_url = "git@github.com:BlueTeam2019/Blue.git"
 repo_dir = "/home/ubuntu/testing/"
