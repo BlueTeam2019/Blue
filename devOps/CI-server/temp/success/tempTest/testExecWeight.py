@@ -1,0 +1,2 @@
+def execTesting():
+	return True, []

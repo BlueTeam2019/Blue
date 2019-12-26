@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-    api:
+    billingapi:
         container_name: billingapi
         build: ./app
         ports: 
@@ -9,13 +9,14 @@ services:
         networks: 
             - backend
         environment: 
-            - 'DB_URL=awsome_provider_sql_1'  
-            - 'DB_PASS=pass' 
-            - 'DB_NAME=billdb'
-            - 'DB_PORT=33060'
-            
-            
-    sql:
+            - DB_URL=mysql
+            - DB_USR=root
+            - DB_PASS=pass
+            - DB_NAME=billdb
+            - DB_PORT=3306
+            - PYTHONUNBUFFERED=1
+
+    mysql:
         container_name: mysql
         build: ./db_scripts
         ports: 
@@ -25,6 +26,7 @@ services:
         volumes: 
             - ./container_data:/var/lib/mysql
             - db:/docker-entrypoint-initdb.d
+            - ./app/in:/root/app/in
         environment: 
             - MYSQL_ROOT_PASSWORD=pass        
             - MYSQL_PASSWORD=pass            
@@ -34,5 +36,6 @@ networks:
 volumes: 
     container_data:
     db:
+    in:
     
         
