@@ -10,10 +10,10 @@
 
 
     function killservice() {
-      $.post("/demo_kill", document.getElementById('container_name').value );
+      $.post("/demo_kill",  $( "#inform" ).serialize() );
     }
     function restartservice() {
-      $.post("/demo_restart", document.getElementById('container_name').value );
+      $.post("/demo_restart",  $( "#inform" ).serialize() );
     }
 
     $(document).ready(function() {
