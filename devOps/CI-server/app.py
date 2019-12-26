@@ -63,6 +63,16 @@ def demo_kill():
     print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
     # out = subprocess.check_output("docker container ls -a", shell=True)
     # return version_hash + "<br>" + test_version_hash + "<br>" + out
+    return "asdasd"
+
+
+@app.route("/demo_restart", )
+def demo_kill():
+    content = request.data
+    print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
+    # out = subprocess.check_output("docker container ls -a", shell=True)
+    # return version_hash + "<br>" + test_version_hash + "<br>" + out
+    return "sdf"
 
 
 # webhook to github
