@@ -60,19 +60,15 @@ def data():
 @app.route("/demo_kill", methods=['GET', 'POST'])
 def demo_kill():
     content = request.form["container"]
-    print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
-    # out = subprocess.check_output("docker container ls -a", shell=True)
-    # return version_hash + "<br>" + test_version_hash + "<br>" + out
-    return "asdasd"
+    out = subprocess.check_output("docker container rm -f {0}".format(content), shell=True)
+    return "success"
 
 
 @app.route("/demo_restart", methods=['GET', 'POST'])
 def demo_restart():
-    content = request.data
-    print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
-    # out = subprocess.check_output("docker container ls -a", shell=True)
-    # return version_hash + "<br>" + test_version_hash + "<br>" + out
-    return "sdf"
+    content = request.form["container"]
+    out = subprocess.check_output("docker container restart {0}".format(content), shell=True)
+    return "success"
 
 
 # webhook to github
