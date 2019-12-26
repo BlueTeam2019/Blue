@@ -50,7 +50,8 @@ def data():
     global version_hash
     global test_version_hash
     out = subprocess.check_output("docker container ls -a", shell=True)
-    return version_hash + "<br>" + test_version_hash + "<br>" + out
+    print(out)
+    return version_hash + "<br>" + test_version_hash  # + "<br>" + out
 
 
 @app.route("/demo_kill", )
