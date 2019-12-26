@@ -122,4 +122,4 @@ if __name__ == '__main__':
     model = ModelBuilder().build()
     bill_helper = BillHelper(weight_url ,model)
 
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=bool(do_debug))
