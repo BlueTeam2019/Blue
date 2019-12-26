@@ -1,5 +1,6 @@
 import os
 
+import requests
 from flask import Flask, request, send_file
 
 from bill_helper import BillHelper
@@ -98,7 +99,7 @@ def update_truck_provider(id):
     return "Invalid Request", 400
 
 
-@app.route('/truck/<int:id>/', methods=["GET"])
+@app.route('/truck/<id>/', methods=["GET"])
 def get_truck(id):
     time_from = request.args["from"]
     time_to = request.args["to"]
@@ -108,9 +109,8 @@ def get_truck(id):
         return f"from: {valid_time_from_format[1]}", 404
     if not valid_time_to_format[0]:
         return f"To:{valid_time_to_format[1]}", 404
-
-    # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
-    print("ok")
+    #if[os.environ['MOCK_TRUCK'] == "FALSE":
+    #return requests.get(f"{os.environ['WEIGHT_URL']}/item/{id}?from={time_from}&to={time_to}")
     return "ok", 200
 
 
