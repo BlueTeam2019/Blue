@@ -1,0 +1,34 @@
+<html>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    function updateData() {
+      $.get("/data",function(data) {
+        $("#docker_containers").text(data);
+        window.setTimeout(updateData,1500);
+      })
+    }
+
+
+    function killservice() {
+      $.post("/demo_kill",  $( "#inform" ).serialize() );
+    }
+    function restartservice() {
+      $.post("/demo_restart",  $( "#inform" ).serialize() );
+    }
+
+    $(document).ready(function() {
+      $("#killbtn").click(killservice)
+      $("#restartbtn").click(restartservice)
+      window.setTimeout(updateData,1500);
+    });
+
+  </script>
+  <body>
+    <form id="inform" action="/api/chat" method="POST">
+      Server Name:<input id="container_name" name="container" type=text>
+      <input id="killbtn" type="button" value="Kill server">
+      <input id="restartbtn" type="button" value="Restart Server">
+    </form>
+    <pre id="docker_containers">Loading...</pre>
+  </body>
+</html>

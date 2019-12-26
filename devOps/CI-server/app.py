@@ -1,14 +1,18 @@
 import os
 import subprocess
 import yaml
-from flask import Flask, request
+from flask import Flask, request, render_template
 from git import Repo
 import shutil
 import sendReport
 from termcolor import colored, cprint
+import logging
 
 # Standard Flask app
 app = Flask(__name__)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 # Configuration
 git_url = "git@github.com:BlueTeam2019/Blue.git"
@@ -18,6 +22,7 @@ providor_path_test = "/awesome_provider/docker-compose-test.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
+indexPath = "/home/ubuntu/Blue/devOps/CI-server/index.html"
 
 # To do: update the pathes
 # Will success:
@@ -33,11 +38,37 @@ test_version_hash = "testing is down"
 
 
 # Standard Flask endpoint
-@app.route("/", )
-def hello_world():
+@app.route('/', methods=['GET'])
+def index_page():
+    if os.path.isfile(indexPath):
+        with open(indexPath, 'r') as f:
+            main_page = f.read()
+    else:
+        return render_template('404.html'), 404
+
+    return main_page
+
+
+@app.route("/data", )
+def data():
     global version_hash
     global test_version_hash
-    return version_hash + "<br>" + test_version_hash
+    out = subprocess.check_output("docker container ls -a", shell=True)
+    return version_hash + "\n" + test_version_hash + "\n\n" + out.decode("utf-8")
+
+
+@app.route("/demo_kill", methods=['GET', 'POST'])
+def demo_kill():
+    content = request.form["container"]
+    out = subprocess.check_output("docker container rm -f {0}".format(content), shell=True)
+    return "success"
+
+
+@app.route("/demo_restart", methods=['GET', 'POST'])
+def demo_restart():
+    content = request.form["container"]
+    out = subprocess.check_output("docker container restart {0}".format(content), shell=True)
+    return "success"
 
 
 # webhook to github
@@ -115,12 +146,13 @@ def exec_tests(providor_path, weight_path):
     from testExecProvidor import runTesting
     sys.path.insert(1, weight_path)
     from testExecWeight import execTesting
-    state, error_list = runTesting()
-    state1, error_list1 = execTesting()
-    if state == True and state1 == True:
+    providors_state, providors_error_list = runTesting()
+    weights_state, weights_error_list = execTesting()
+    if providors_state == True and weights_state == True:
         return True, []
     else:
-        combined_tests_list = error_list + error_list1 + ["%d tests failed" % len(error_list + error_list1)]
+        combined_tests_list = providors_error_list + weights_error_list + [
+            "%d tests failed" % len(providors_error_list + weights_error_list)]
         return False, combined_tests_list
 
 
