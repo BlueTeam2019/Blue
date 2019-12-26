@@ -16,7 +16,7 @@ IN_DIR      = 'in/' # Path to Blue/weight/in folder (batch-weight)
 MYSQL_DB	= 'weight'
 MYSQL_USER  = 'root'
 MYSQL_PW 	= 'pass'
-MYSQL_HOST 	= 'localhost'
+MYSQL_HOST 	= 'mysql'
 MYSQL_PORT	= '3306'
 
 app = Flask(__name__)
