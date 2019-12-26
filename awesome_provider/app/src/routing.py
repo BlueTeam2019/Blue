@@ -20,12 +20,10 @@ def check_health():
 def get_bill(id):
     time_from = request.args["from"]
     time_to = request.args["to"]
-    valid_time_from_format = validate_time_format(time_from)
-    valid_time_to_format = validate_time_format(time_to)
-    if not valid_time_from_format[0]:
-        return f"from: {valid_time_from_format[1]}", 404
-    if not valid_time_to_format[0]:
-        return f"To:{valid_time_to_format[1]}", 404
+    if not validate_time_format(time_from):
+        return "Can not read start time", 400
+    if not validate_time_format(time_to):
+        return "Can not read end time", 400
 
     total_pay, truck_count, session_count, products, provider_name \
     = bill_helper.get_data(id, time_from, time_to)
