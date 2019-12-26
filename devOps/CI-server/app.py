@@ -1,12 +1,12 @@
 import os
 import subprocess
-import yaml
 from flask import Flask, request, render_template
 from git import Repo
 import shutil
 import sendReport
 from termcolor import colored, cprint
 import logging
+import sys
 
 # Standard Flask app
 app = Flask(__name__)
@@ -155,7 +155,6 @@ def create_repo_of_commit(git_url, repo_dir, commit_hash):
 
 
 def exec_tests(providor_path, weight_path):
-    import sys
     sys.path.insert(1, providor_path)
     from testExecProvidor import runTesting
     sys.path.insert(1, weight_path)
