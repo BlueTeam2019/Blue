@@ -123,6 +123,7 @@ def webhook():
         print("\n\n")
         cprint('Updating production...', 'red', 'on_white', attrs=['bold'])
         build(repo + weight_path_prod, repo + providor_path_prod)
+        subprocess.run("sudo rm -rfd ~/master_hist/*", shell=True)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
         version_hash = "Production server: " + branch_name + " - " + head_commit
 
@@ -160,7 +161,6 @@ def exec_tests(providor_path, weight_path):
 def clean_env():
     subprocess.run("docker system prune -af", shell=True)
     subprocess.run("sudo rm -rfd ~/testing/*", shell=True)
-    subprocess.run("sudo rm -rfd ~/master_hist/*", shell=True)
 
 
 def build(weight_path, provider_path):
