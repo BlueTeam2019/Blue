@@ -57,7 +57,7 @@ def data():
     return version_hash + "\n" + test_version_hash + "\n\n" + out.decode("utf-8")
 
 
-@app.route("/demo_kill", )
+@app.route("/demo_kill",methods=['GET', 'POST'] )
 def demo_kill():
     content = request.data
     print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
@@ -66,7 +66,7 @@ def demo_kill():
     return "asdasd"
 
 
-@app.route("/demo_restart", )
+@app.route("/demo_restart", methods=['GET', 'POST'])
 def demo_restart():
     content = request.data
     print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
