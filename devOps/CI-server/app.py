@@ -1,7 +1,7 @@
 import os
 import subprocess
 import yaml
-from flask import Flask, request
+from flask import Flask, request, render_template
 from git import Repo
 import shutil
 import sendReport
@@ -18,6 +18,7 @@ providor_path_test = "/awesome_provider/docker-compose-test.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
+indexPath = "/home/ubuntu/Blue/devOps/CI-server/index.html"
 
 # To do: update the pathes
 # Will success:
@@ -33,11 +34,31 @@ test_version_hash = "testing is down"
 
 
 # Standard Flask endpoint
-@app.route("/", )
-def index():
+@app.route('/', methods=['GET'])
+def index_page():
+    if os.path.isfile(indexPath):
+        with open(indexPath, 'r') as f:
+            main_page = f.read()
+    else:
+        return render_template('404.html'), 404
+
+    return main_page
+
+
+@app.route("/data", )
+def data():
     global version_hash
     global test_version_hash
-    return version_hash + "<br>" + test_version_hash
+    out = subprocess.check_output("docker container ls -a", shell=True)
+    return version_hash + "<br>" + test_version_hash + "<br>" + out
+
+
+@app.route("/demo_kill", )
+def demo_kill():
+    content = request.data
+    print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
+    # out = subprocess.check_output("docker container ls -a", shell=True)
+    # return version_hash + "<br>" + test_version_hash + "<br>" + out
 
 
 # webhook to github
