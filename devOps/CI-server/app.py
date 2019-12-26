@@ -59,8 +59,8 @@ def data():
 
 @app.route("/demo_kill", methods=['GET', 'POST'])
 def demo_kill():
-    content = request.form
-    print(colored('Content is ' + content.decode("utf-8"), 'green', attrs=['reverse', 'blink']))
+    content = next(iter(request.form.values()))
+    print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
     # out = subprocess.check_output("docker container ls -a", shell=True)
     # return version_hash + "<br>" + test_version_hash + "<br>" + out
     return "asdasd"
