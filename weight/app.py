@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 
-import os
+import re   # regex, re.search
+import os   # os.path.join
+import csv
+import json
 import pymysql
-import pymysql.cursors
 from datetime import datetime
-import pandas as pd
-from flask import jsonify
-from flask import Flask, request, render_template
-from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename
+from flask import Flask, request, render_template, jsonify
 
 ACCESS_PORT = 8082   # internal port: 5000
 IN_DIR      = 'in/' # Path to Blue/weight/in folder (batch-weight)
-
+UNIT_COL    = 1     # Column num in CSVs stating unit type(lbs/kg) for batch
+WEIGHTUNITS = "(kg)|(lbs)"
 MYSQL_DB	= 'weight'
 MYSQL_USER  = 'root'
 MYSQL_PW 	= 'pass'
@@ -39,17 +39,17 @@ def checkalive():
             cur.execute(query)
         except Exception:
             return "Error with query: " + query, 500
-        else:
-            db.commit()
-            result = cur.fetchall()
-            print(result)
+        # else: # for debugging purposes, examine fetched data. unfinished.
+        #     result = cur.fetchall()
         db.close() 
     return "HOME is where ♥Heart is❤❤❤", 200
 
 
 @app.route("/batch-weight", methods=['POST'])
 def batch_up():
-    # 1- receive file (to be parsed) or filename (to be looked in /in)
+    db = getMysqlConnection()
+    cur = db.cursor()
+
     filename=request.form.get('file')
     if not filename:    #--if file was uploaded, then save it to /in
         f = request.files['file']
@@ -57,32 +57,30 @@ def batch_up():
             return "NO FILE was POSTed"
         filename = secure_filename(f.filename)
         f.save(os.path.join(IN_DIR, filename))
-    # 2- check if csv or json, to parse correctly
+
+    query = "REPLACE INTO containers_registered(container_id,weight,unit) VALUES (%s, %s, %s)" 
     suffix=filename.split('.')[-1].lower()
     if suffix=='csv':
-        df = pd.read_csv(IN_DIR+filename)
+        with open(os.path.join(IN_DIR, filename), 'r') as f:
+            parsed_data = csv.DictReader(f)
+            unit = parsed_data.fieldnames[UNIT_COL]
+            if not re.search(unit, WEIGHTUNITS, re.IGNORECASE):
+                return jsonify({'message':"Unit missing (kg,lbs)", 'status': 404})
+            for row in parsed_data:
+                cur.execute(query,[row['id'], row[unit], unit])
     elif suffix=='json':
-        df = pd.read_json(IN_DIR+filename)
-    # 3- maintain a connection to MySQL DB
-    engine = create_engine('mysql+pymysql://'+MYSQL_USER+':'\
-        +MYSQL_PW+'@'+MYSQL_HOST+':'+MYSQL_PORT+'/'+MYSQL_DB, echo=False)
-    # 4- send query (INSERT), replacing current table values
-    with engine.connect() as conn, conn.begin():
-        df.to_sql('containers_registered', conn, if_exists='replace')
-    return "fine"
+        with open(os.path.join(IN_DIR, filename), 'r') as f:
+            parsed_data = json.load(f)
+            for row in parsed_data:
+                cur.execute(query,[row['id'], row['weight'], row['unit']])  
+
+    return "fine", 200
 
 
 @app.route('/session/<id>', methods=['GET'])
 def session(id):
-    db = getMysqlConnection() # CHANGE
-    
-                #   origional
-                #       getsession = "SELECT JSON_ARRAYAGG(JSON_OBJECT('id', id, 'created', created_at, 'truckid', truckid, 'Bruto', bruto, 'truckTara', truckTara, 'Neto', neto)) from sessions where id='%s'" %id
+    db = getMysqlConnection()
     getsession = "SELECT * from transactions where id={}".format(id)
-
-        #return id',truckid', 'Bruto')
-        #IF OUT  (truckTara, neto)  
-
     cur = db.cursor()
     cur.execute(getsession)
     output = cur.fetchone()
@@ -91,12 +89,13 @@ def session(id):
     if output==None:
         return jsonify({'message':'No session found', 'status':404})
 
-    return_json=jsonify({"id":output['id'],"truck":output['truck'],"bruto":output['bruto']})
-        #ONLY for OUT:
     if output['direction']=="out":
-        return_json=jsonify({"id":output['id'],"truck":output['truck'],"bruto":output['bruto'],"truckTara":output['truckTara'],"neto":output['neto']})
+        ret_json=jsonify({"id":output['id'],"truck":output['truck'],\
+            "bruto":output['bruto'],"truckTara":output['truckTara'],"neto":output['neto']})
+    else:
+        ret_json=jsonify({"id":output['id'],"truck":output['truck'],"bruto":output['bruto']})
 
-    return return_json
+    return ret_json
 
 
 def calculate_neto(bruto,trackTara,list_containers):
@@ -139,9 +138,7 @@ def post_weight():
         currentWeight=currentWeight*float(0.453592)
     produce=request.form.get('produce')
     force=request.form.get('force', False)
-    
 
-     
     #validation 
     if(direction=="in" or direction=="none") and (containers is None or produce is None):
         return "ERROR - no containers or produce"
@@ -156,7 +153,6 @@ def post_weight():
     cur.fetchall()
     #get session of last session id
     if lastSessionID:
-        
         query="select * from transactions where id={}".format(lastSessionID['id'])
         print(f"Query is:{query}")
         cur = db.cursor()
@@ -234,19 +230,6 @@ def post_weight():
         return_json=jsonify({"id":output['id'],"truck":output['truck'],"bruto":output['bruto'],"truckTara":output['truckTara'],"neto":output['neto']})
     db.close()
     return return_json
-        
-                      
-
-
-
-    
-
-
-
-
-
-
-
 
 
 app.run(host="0.0.0.0", port=ACCESS_PORT, debug=True)
