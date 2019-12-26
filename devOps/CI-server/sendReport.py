@@ -9,8 +9,8 @@ def send_report(success,results, pusher_email, commit_hash, branch_name):
     sent_from = gmail_user
     to = [pusher_email,'lehacohen160@gmail.com']
 
-    message = 'Build completed successfully'
-    body = message
+    message = 'Build completed successfully' 
+    body = message + '\nCommit hash: %s \nbranch name: %s \n' %(commit_hash, branch_name)
     if not success:
         message = 'Build failed'
         str = "Build faild. \ncommit hash: %s \nbranch name: %s \n" %(commit_hash, branch_name) 
