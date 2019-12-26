@@ -1,11 +1,13 @@
+import os
+
 import requests
 import json
 
 
 class BillHelper(object):
 
-    def __init__(self, model, wight_url):
-        self.model_ = model
+    def __init__(self, wight_url, model):
+        self.data_model = model
         self.weight_url = wight_url
 
     def get_json(self, id, from_t, to_t, total_pay, \
@@ -28,6 +30,7 @@ class BillHelper(object):
         session_count = 0
 
         for row in trucks_table:
+            if row[0] == "I": break
             if int(row[0]) in weights_dict:
                 truck_count += 1
                 for session in weights_dict[int(row[0])]:
@@ -66,7 +69,7 @@ class BillHelper(object):
         return to_add
 
     def get_rates(self, id):
-        table = self.model_.get_rates(id)
+        table = self.data_model.get_rates(id)
         rates = {}
         for row in table:
             if row[2] == "ALL" and \
@@ -76,18 +79,15 @@ class BillHelper(object):
         return rates
 
     def get_provider_name(self, id):
-        return self.model_.get_provider_by_id(id)
+        return self.data_model.get_provider_by_id(id)
 
     def get_truck(self, id):
-        return self.model_.get_trucks(id)
+        return self.data_model.get_trucks(id)
 
     def get_weights(self, from_t, to_t):
-        # issue: pass as parameters ?from_t=<int>&to_t=<int>&f="out"
-        # response = requests.get(self.weight_url, from_t, to_t, "out")
-        # return json.loads("response")
-        # return self.model_.get_weights(from_t, to_t)
+        if os.environ["MOCK_WEIGHT"] == "FALSE":
+            return self.model_.get_weights(from_t, to_t)
         ##  returns mock ##
-
         return [{"id": 1,
                  "direction": "out",
                  "bruto": 0,

@@ -1,10 +1,9 @@
 import os
+
 from flask import Flask, request, send_file
 
 from bill_helper import BillHelper
-from model import Model
 from model_builder import ModelBuilder
-from query_helper import QueryHelper
 from routing_handler import validate_time_format
 
 app = Flask(__name__)
@@ -14,7 +13,7 @@ app = Flask(__name__)
 def check_health():
     if model.check_health():
         return "OK", 200
-    return "Internal Error", 500
+    return "Infernal error", 500
 
 @app.route('/bill/<int:id>', methods=["GET"])
 def get_bill(id):
@@ -48,20 +47,6 @@ def put_provider(id):
     if not result[0]:
         return result[1], 404
     return result[1], 200
-
-
-
-@app.route('/truck/<int:id>/', methods=["GET"])
-def get_truck(id):
-    time_from = request.args["from"]
-    time_to = request.args["to"]
-    if not validate_time_format(time_from):
-        return "Can not read start time", 401
-    if not validate_time_format(time_to):
-        return "Can not read end time", 401
-    # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
-    print("ok")
-    return "ok", 200
 
 
 @app.route('/rates', methods=['GET', 'POST'])
@@ -120,9 +105,9 @@ def get_truck(id):
     valid_time_from_format = validate_time_format(time_from)
     valid_time_to_format = validate_time_format(time_to)
     if not valid_time_from_format[0]:
-        return f"from: {valid_time_from_format[1]}", 404
+        return f"from: {valid_time_from_format[1]}", 401
     if not valid_time_to_format[0]:
-        return f"To:{valid_time_to_format[1]}", 404
+        return f"To:{valid_time_to_format[1]}", 401
 
     # return request.get(f"localhost:8082/item/{id}','from':{time_from} ,'to':{time_to}")
     print("ok")
@@ -132,7 +117,7 @@ def get_truck(id):
 if __name__ == '__main__':
     do_debug = os.environ.get('DEBUG', False)
     weight_url = os.environ.get('WEIGHT_URL')
-    model = ModelBuilder()
-    bill_helper = BillHelper(weight_url ,ModelBuilder())
+    model = ModelBuilder().build()
+    bill_helper = BillHelper(weight_url ,model)
 
     app.run(host='0.0.0.0', debug=bool(do_debug))

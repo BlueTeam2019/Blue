@@ -15,7 +15,8 @@ services:
             - DB_NAME=billdb
             - DB_PORT=3306
             - PYTHONUNBUFFERED=1
-            - WEIGHT_URL=???       TODO'
+            - WEIGHT_URL='http://ec2-54-198-29-152.compute-1.amazonaws.com:8087'
+            - MOCK_WEIGHT=TRUE
 
     mysql:
         container_name: mysql
