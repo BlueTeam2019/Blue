@@ -14,7 +14,7 @@ app = Flask(__name__)
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
-# Configuration
+## Configuration
 git_url = "git@github.com:BlueTeam2019/Blue.git"
 repo_dir = "/home/ubuntu/testing/"
 weight_path_test = "/weight/docker-compose_test.yml"
