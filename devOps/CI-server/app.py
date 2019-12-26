@@ -34,7 +34,7 @@ test_version_hash = "testing is down"
 
 # Standard Flask endpoint
 @app.route("/", )
-def hello_world():
+def index():
     global version_hash
     global test_version_hash
     return version_hash + "<br>" + test_version_hash
@@ -134,11 +134,7 @@ def clean_env():
 
 def build(weight_path, provider_path):
     cprint('Building weights app...', 'red', 'on_white', attrs=['bold'])
-    result = subprocess.run("docker-compose -f {0} build --no-cache".format(weight_path), shell=True,
-                            stderr=subprocess.PIPE)
-    print(result.stderr)
-    print(result)
-    cprint("result.stderr == 0", 'red', 'on_white', attrs=['bold'])
+    subprocess.run("docker-compose -f {0} build --no-cache".format(weight_path), shell=True)
     print("\n\n")
     cprint('Composing weights app...', 'red', 'on_white', attrs=['bold'])
     subprocess.run("docker-compose -f {0} up -d".format(weight_path), shell=True)
