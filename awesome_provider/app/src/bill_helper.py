@@ -31,7 +31,7 @@ class BillHelper(object):
 
         for row in trucks_table:
             if row[0] == "I": break
-            if int(row[0]) in weights_dict:
+            if row[0] in weights_dict:
                 truck_count += 1
                 for session in weights_dict[int(row[0])]:
                     session_count += 1
@@ -74,7 +74,7 @@ class BillHelper(object):
         for row in table:
             if row[2] == "ALL" and \
                     row[0] not in rates or \
-                    int(row[2]) == id:
+                    row[2] == id:
                 rates[row[0]] = row[1]
         return rates
 
@@ -86,7 +86,7 @@ class BillHelper(object):
 
     def get_weights(self, from_t, to_t):
         if os.environ["MOCK_WEIGHT"] == "FALSE":
-            return self.model_.get_weights(from_t, to_t)
+            return self.data_model.get_weights(from_t, to_t)
         ##  returns mock ##
         return [{"id": 1,
                  "direction": "out",
