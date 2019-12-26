@@ -57,10 +57,10 @@ def data():
     return version_hash + "\n" + test_version_hash + "\n\n" + out.decode("utf-8")
 
 
-@app.route("/demo_kill",methods=['GET', 'POST'] )
+@app.route("/demo_kill", methods=['GET', 'POST'])
 def demo_kill():
     content = request.data
-    print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
+    print(colored('Content is ' + content.decode("utf-8"), 'green', attrs=['reverse', 'blink']))
     # out = subprocess.check_output("docker container ls -a", shell=True)
     # return version_hash + "<br>" + test_version_hash + "<br>" + out
     return "asdasd"
