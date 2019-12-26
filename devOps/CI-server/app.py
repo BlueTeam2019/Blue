@@ -67,7 +67,7 @@ def demo_kill():
 
 
 @app.route("/demo_restart", )
-def demo_kill():
+def demo_restart():
     content = request.data
     print(colored('Content is ' + content, 'green', attrs=['reverse', 'blink']))
     # out = subprocess.check_output("docker container ls -a", shell=True)
