@@ -1,6 +1,6 @@
 <html>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
     function updateData() {
       $.get("/data",function(data) {
         $("#docker_containers").text(data);
@@ -8,7 +8,9 @@
       })
     }
 
-
+    function restartall() {
+      $.get("/demo_restart_all");
+    }
     function killservice() {
       $.post("/demo_kill",  $( "#inform" ).serialize() );
     }
@@ -19,16 +21,19 @@
     $(document).ready(function() {
       $("#killbtn").click(killservice)
       $("#restartbtn").click(restartservice)
+      $("#restartallbtn").click(restartall)
       window.setTimeout(updateData,1500);
     });
 
-  </script>
-  <body>
-    <form id="inform" action="/api/chat" method="POST">
-      Server Name:<input id="container_name" name="container" type=text>
-      <input id="killbtn" type="button" value="Kill server">
-      <input id="restartbtn" type="button" value="Restart Server">
-    </form>
-    <pre id="docker_containers">Loading...</pre>
-  </body>
+
+</script>
+<body>
+<form id="inform" action="/api/chat" method="POST">
+    Server Name:<input id="container_name" name="container" type=text>
+    <input id="killbtn" type="button" value="Kill server">
+    <input id="restartbtn" type="button" value="Restart Server">
+    <input id="restartallbtn" type="button" value="Deploy latest master">
+</form>
+<pre id="docker_containers">Loading...</pre>
+</body>
 </html>

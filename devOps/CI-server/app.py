@@ -35,6 +35,7 @@ weight_run_tests_path = "/devOps/CI-server/temp/success/tempTest"
 # global var
 version_hash = "production is down."
 test_version_hash = "testing is down"
+latest_master = ""
 
 
 # Standard Flask endpoint
@@ -71,12 +72,23 @@ def demo_restart():
     return "success"
 
 
+@app.route("/demo_restart_all", methods=['GET', 'POST'])
+def demo_restart_all():
+    global master_history_path
+    global latest_master
+    global weight_path_prod
+    global providor_path_prod
+    build(master_history_path + "/" + latest_master + weight_path_prod,
+          master_history_path + "/" + latest_master + providor_path_prod)
+    return "success"
+
 # webhook to github
 @app.route('/webhook', methods=['POST'])
 def webhook():
     print(colored('Incoming push!!!', 'red', attrs=['reverse', 'blink']))
     global version_hash
     global test_version_hash
+    global latest_master
 
     # parsing post request
     cprint('Parsing github webhook POST request...', 'red', 'on_white', attrs=['bold'])
@@ -125,6 +137,7 @@ def webhook():
         build(repo + weight_path_prod, repo + providor_path_prod)
         subprocess.run("sudo rm -rfd ~/master_hist/*", shell=True)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
+        latest_master = head_commit
         version_hash = "Production server: " + branch_name + " - " + head_commit
 
     print("\n\n")
