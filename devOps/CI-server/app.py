@@ -1,14 +1,18 @@
 import os
 import subprocess
 import yaml
-from flask import Flask, request
+from flask import Flask, request, render_template
 from git import Repo
 import shutil
 import sendReport
 from termcolor import colored, cprint
+import logging
 
 # Standard Flask app
 app = Flask(__name__)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 # Configuration
 git_url = "git@github.com:BlueTeam2019/Blue.git"
@@ -18,6 +22,7 @@ providor_path_test = "/awesome_provider/docker-compose-test.yml"
 weight_path_prod = "/weight/docker-compose.yml"
 providor_path_prod = "/awesome_provider/docker-compose.yml"
 master_history_path = "/home/ubuntu/master_hist"
+indexPath = "/home/ubuntu/Blue/devOps/CI-server/index.html"
 
 # To do: update the pathes
 # Will success:
@@ -33,11 +38,37 @@ test_version_hash = "testing is down"
 
 
 # Standard Flask endpoint
-@app.route("/", )
-def index():
+@app.route('/', methods=['GET'])
+def index_page():
+    if os.path.isfile(indexPath):
+        with open(indexPath, 'r') as f:
+            main_page = f.read()
+    else:
+        return render_template('404.html'), 404
+
+    return main_page
+
+
+@app.route("/data", )
+def data():
     global version_hash
     global test_version_hash
-    return version_hash + "<br>" + test_version_hash
+    out = subprocess.check_output("docker container ls -a", shell=True)
+    return version_hash + "\n" + test_version_hash + "\n\n" + out.decode("utf-8")
+
+
+@app.route("/demo_kill", methods=['GET', 'POST'])
+def demo_kill():
+    content = request.form["container"]
+    out = subprocess.check_output("docker container rm -f {0}".format(content), shell=True)
+    return "success"
+
+
+@app.route("/demo_restart", methods=['GET', 'POST'])
+def demo_restart():
+    content = request.form["container"]
+    out = subprocess.check_output("docker container restart {0}".format(content), shell=True)
+    return "success"
 
 
 # webhook to github
@@ -92,6 +123,7 @@ def webhook():
         print("\n\n")
         cprint('Updating production...', 'red', 'on_white', attrs=['bold'])
         build(repo + weight_path_prod, repo + providor_path_prod)
+        subprocess.run("sudo rm -rfd ~/master_hist/*", shell=True)
         shutil.move(repo, master_history_path, copy_function=shutil.copytree)
         version_hash = "Production server: " + branch_name + " - " + head_commit
 
@@ -129,7 +161,6 @@ def exec_tests(providor_path, weight_path):
 def clean_env():
     subprocess.run("docker system prune -af", shell=True)
     subprocess.run("sudo rm -rfd ~/testing/*", shell=True)
-    subprocess.run("sudo rm -rfd ~/master_hist/*", shell=True)
 
 
 def build(weight_path, provider_path):
