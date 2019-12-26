@@ -1,3 +1,4 @@
+import requests
 from model_handlers import generate_query_from_excel
 import json
 
@@ -11,6 +12,31 @@ class Model(object):
         if int(data[0][0]) == 1:
             return True
         return False
+
+    def get_provider_by_id(self, id):
+        table = self.query.get_data\
+            (f"select * from Provider where id='{id}';")
+        #return '' if the id is not exist and else:table
+        if not table:
+            return "ID is not exist"
+        return  table[0][1]
+
+    def get_rates(self, id):
+        return self.query.get_data(f"select * from Rates ;")
+
+    def get_weights(self, from_time, to_time):
+        response = requests.get(self.weight_url + f"?from={from_time}&"
+                                                  f"to_time={to_time}&"
+                                                  f"filter=OUT")
+        return json.loads(response)
+
+    # return trucks {} hash_set by provider id
+    def get_trucks(self, id):
+        table = self.query.get_data(f"select id from Trucks "
+                                    f"where provider_id='{id}';")
+        if not table:
+            return "ID is not exist"
+        return table
 
     def update_truck_provider(self, request, new_provider):
         is_updated = False
@@ -108,7 +134,9 @@ class Model(object):
         # First remove all records from the table
         self.query.alter_data(f'''DELETE FROM {table_name};''')
         # Insert new values into the table
-        db_records = self.query.alter_data(f'''INSERT INTO {table_name}(product_id, rate, scope) VALUES {file_query};''')
+        db_records = self.query.alter_data(
+            f'''INSERT INTO {table_name}(product_id, rate, scope) VALUES {file_query};''')
 
         return int(db_records)
+
 
