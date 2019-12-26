@@ -101,7 +101,7 @@ def update_truck_provider(id):
     return "Invalid Request", 400
 
 
-@app.route('/truck/<int:id>/', methods=["GET"])
+@app.route('/truck/<id>/', methods=["GET"])
 def get_truck(id):
     time_from = request.args["from"]
     time_to = request.args["to"]
@@ -122,4 +122,4 @@ if __name__ == '__main__':
     model = ModelBuilder().build()
     bill_helper = BillHelper(weight_url ,model)
 
-    app.run(host='0.0.0.0', debug=bool(do_debug))
+    app.run(host='0.0.0.0', debug=True)
