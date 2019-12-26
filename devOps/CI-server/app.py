@@ -6,11 +6,11 @@ from git import Repo
 import shutil
 import sendReport
 from termcolor import colored, cprint
+import logging
 
 # Standard Flask app
 app = Flask(__name__)
 
-import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
