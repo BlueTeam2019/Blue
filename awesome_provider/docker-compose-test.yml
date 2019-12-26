@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-
     billing_api_test:
         container_name: billing_api_test
         build:
@@ -19,9 +18,9 @@ services:
     billing_sql_test:
         sql_test_data: billing_sql_test
         build: ./db_scripts
-        ports: 
+        ports:
             - "3408:3306"
-        networks: 
+        networks:
             - backend
         volumes:
             - dbtest:/docker-entrypoint-initdb.d
@@ -29,7 +28,7 @@ services:
             - sql_test_data:/docker-entrypoint-initdb.d
         environment: 
             - MYSQL_ROOT_PASSWORD=pass
-            - MYSQL_PASSWORD=pass            
+            - MYSQL_PASSWORD=pass
             - MYSQL_DATABASE=billdb
 networks:
     backend:

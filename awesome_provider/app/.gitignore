@@ -1,3 +1,5 @@
 virt
 .idea
 *.pyc
+/scatch.txt
+commands.txt

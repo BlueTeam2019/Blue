@@ -24,3 +24,4 @@ def generate_query_from_excel(file):
 
     # Return properly formatted query
     return ',\n'.join(query_values) + ';'
+

@@ -1,7 +1,9 @@
 import os
+
 from flask import Flask, request, send_file
-from model import Model
-from query_helper import QueryHelper
+
+from bill_helper import BillHelper
+from model_builder import ModelBuilder
 from routing_handler import validate_time_format
 
 app = Flask(__name__)
@@ -11,15 +13,30 @@ app = Flask(__name__)
 def check_health():
     if model.check_health():
         return "OK", 200
-    return "Internal Error", 500
+    return "Infernal error", 500
 
+@app.route('/bill/<int:id>', methods=["GET"])
+def get_bill(id):
+    time_from = request.args["from"]
+    time_to = request.args["to"]
+    if not validate_time_format(time_from):
+        return "Can not read start time", 400
+    if not validate_time_format(time_to):
+        return "Can not read end time", 400
+
+    total_pay, truck_count, session_count, products, provider_name \
+    = bill_helper.get_data(id, time_from, time_to)
+    return bill_helper.get_json(id, time_from, time_to,
+                            total_pay, truck_count,
+                            session_count, products,
+                            provider_name)
 
 @app.route('/provider', methods=["POST"])
 def post_provider():
     data = request.json
     result = model.create_provider(data["name"])
     if not result:
-        return "The name is exist ,Choose another one", 404
+        return "The name already exist, Choose another one", 401
     return result, 200
 
 
@@ -98,13 +115,9 @@ def get_truck(id):
 
 
 if __name__ == '__main__':
-    db_url = os.environ['DB_URL']
-    db_user = os.environ['DB_USR']
-    db_pass = os.environ['DB_PASS']
-    db_name = os.environ['DB_NAME']
-    db_port = int(os.environ['DB_PORT'])
     do_debug = os.environ.get('DEBUG', False)
-    query_helper = QueryHelper(db_url, db_user, db_pass, db_name, db_port)
-    model = Model(query_helper)
+    weight_url = os.environ.get('WEIGHT_URL')
+    model = ModelBuilder().build()
+    bill_helper = BillHelper(weight_url ,model)
 
     app.run(host='0.0.0.0', debug=bool(do_debug))

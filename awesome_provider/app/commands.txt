@@ -1,0 +1,7 @@
+Unit Tests:
+
+python3 -m venv virt
+source virt/bin/activate
+sudo apt install default-libmysqlclient-dev
+pip3 install -r requierments.txt
+python -m unittest discover ../tests/

@@ -37,8 +37,8 @@ class QueryHelper(object):
         return return_value
 
     def get_data(self, query):
-        return_value = ""
         db = None
+        return_value = ""
         if query:
             try:
                 db = pymysql.connect(host=self.url,  # your host, usually localhost
@@ -61,4 +61,5 @@ class QueryHelper(object):
         return return_value
 
     def select_one(self):
+
         return self.get_data(""" select 1  """)
