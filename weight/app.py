@@ -42,7 +42,7 @@ def checkalive():
         # else: # for debugging purposes, examine fetched data. unfinished.
         #     result = cur.fetchall()
         db.close() 
-    return "HOME is where ♥Heart is❤❤❤", 200
+    return "Good morning Noga!!!", 200
 
 
 @app.route("/batch-weight", methods=['POST'])
